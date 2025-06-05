@@ -1,0 +1,21 @@
+{
+  "name": "My Server",
+  "host": "147.79.84.76",
+  "protocol": "ftp",
+  "port": 21,
+  "username": "u688790493",
+  "password": "HHgg243@",
+  "remotePath": "/domains/heglasmoreira.com.br/public_html/scripts",
+  "uploadOnSave": true,
+  "useTempFile": false,
+  "openSsh": false,
+  "watcher": {
+    "files": "**/*",
+    "autoUpload": true,
+    "autoDelete": false,
+    "ignoreCreate": false,
+    "ignoreUpdate": false,
+    "ignoreDelete": true
+  },
+  "ignore": []
+}
