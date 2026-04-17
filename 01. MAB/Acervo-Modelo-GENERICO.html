@@ -1,0 +1,679 @@
+<!-- ============================================================
+     MAB — ACERVO DIGITAL | Fragmento para Artigo Joomla
+     Instruções: Cole este código inteiro no editor "None" do Joomla.
+     NÃO abra este artigo com TinyMCE ativo — ele removerá os scripts.
+     Personalize: substitua os dados do T-6 Texan pelos da sua peça.
+============================================================ -->
+
+<!-- ① FONTES E LIBS EXTERNAS (carregadas uma vez por página) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- ② ESTILOS ESCOPADOS (prefixo .mab-acervo evita conflito com template) -->
+<style>
+.mab-acervo *,.mab-acervo *::before,.mab-acervo *::after{box-sizing:border-box}
+.mab-acervo {
+  --fab-bg:       #0b0e14;
+  --fab-surface:  #111520;
+  --fab-s2:       #16192a;
+  --fab-offset:   #1c2035;
+  --fab-dynamic:  #242843;
+  --fab-divider:  #2a2f4a;
+  --fab-border:   #363c5c;
+  --fab-text:     #e8eaf0;
+  --fab-muted:    #8b92b0;
+  --fab-faint:    #4a5070;
+  --fab-blue:     #1a73c5;
+  --fab-blue-h:   #1560a8;
+  --fab-blue-bg:  #0f1e35;
+  --fab-gold:     #c8a84b;
+  --fab-gold-h:   #b8952e;
+  --fab-gold-bg:  #251e0a;
+  --fab-green:    #4caf50;
+  --fab-r-sm:     0.25rem;
+  --fab-r-md:     0.5rem;
+  --fab-r-lg:     0.75rem;
+  --fab-r-xl:     1rem;
+  --fab-r-full:   9999px;
+  --fab-shadow:   0 4px 20px rgba(0,0,0,0.5);
+  --fab-tr:       180ms cubic-bezier(0.16,1,0.3,1);
+  --fd: 'Barlow Condensed','Arial Narrow',sans-serif;
+  --fb: 'Barlow','Helvetica Neue',sans-serif;
+  font-family: var(--fb);
+  font-size: clamp(1rem,0.95rem + 0.25vw,1.125rem);
+  color: var(--fab-text);
+  background: var(--fab-bg);
+  border-radius: var(--fab-r-xl);
+  overflow: hidden;
+  line-height: 1.65;
+}
+
+/* ---- HERO ---- */
+.mab-acervo .hero {
+  position:relative;overflow:hidden;
+  background:var(--fab-surface);
+  border-bottom:1px solid var(--fab-divider);
+}
+.mab-acervo .hero::before {
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(to right,var(--fab-divider) 1px,transparent 1px),
+                   linear-gradient(to bottom,var(--fab-divider) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.18;pointer-events:none;z-index:0;
+}
+.mab-acervo .hero::after {
+  content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
+  background:linear-gradient(to bottom,transparent,var(--fab-bg));
+  pointer-events:none;z-index:1;
+}
+.mab-acervo .hero-grid {
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center;
+  padding:3rem 2rem 2rem;max-width:1100px;margin:0 auto;
+}
+@media(max-width:860px){.mab-acervo .hero-grid{grid-template-columns:1fr;padding:2rem 1rem 1.5rem}}
+
+/* Breadcrumb */
+.mab-acervo .bc{display:flex;align-items:center;gap:.5rem;
+  font-size:.75rem;color:var(--fab-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem}
+.mab-acervo .bc a{color:var(--fab-muted);text-decoration:none;transition:color var(--fab-tr)}
+.mab-acervo .bc a:hover{color:var(--fab-gold)}
+.mab-acervo .bc-sep{color:var(--fab-faint)}
+
+/* Badges */
+.mab-acervo .badge-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.mab-acervo .badge{
+  font-family:var(--fd);font-size:.7rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.2rem .7rem;border-radius:var(--fab-r-sm);border:1px solid
+}
+.mab-acervo .badge-era  {color:var(--fab-gold); border-color:var(--fab-gold); background:var(--fab-gold-bg)}
+.mab-acervo .badge-cat  {color:var(--fab-blue); border-color:var(--fab-blue); background:var(--fab-blue-bg)}
+.mab-acervo .badge-ok   {color:var(--fab-green);border-color:#2e7d32;        background:rgba(46,125,50,.12)}
+
+/* Título */
+.mab-acervo .piece-title{
+  font-family:var(--fd);font-weight:800;
+  font-size:clamp(2.2rem,5vw,4.5rem);
+  line-height:1.05;letter-spacing:.01em;
+  color:var(--fab-text);margin-bottom:.75rem
+}
+.mab-acervo .piece-sub{
+  font-size:clamp(.95rem,1vw,1.05rem);color:var(--fab-muted);
+  margin-bottom:1.5rem;line-height:1.6;max-width:52ch
+}
+
+/* Meta chips */
+.mab-acervo .meta-chips{display:flex;flex-wrap:wrap;gap:.75rem}
+.mab-acervo .mc{
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--fab-offset);border:1px solid var(--fab-border);
+  border-radius:var(--fab-r-lg);padding:.4rem .75rem;
+}
+.mab-acervo .mc svg{color:var(--fab-gold);width:15px;height:15px;flex-shrink:0}
+.mab-acervo .mc-l{font-size:.65rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em;display:block}
+.mab-acervo .mc-v{font-family:var(--fd);font-weight:700;font-size:.95rem;color:var(--fab-text)}
+.mab-acervo .mc-v small{font-family:var(--fb);font-weight:400;font-size:.8rem;color:var(--fab-muted)}
+
+/* ---- CANVAS 3D ---- */
+.mab-acervo .model-wrap{
+  position:relative;border-radius:var(--fab-r-xl);overflow:hidden;
+  aspect-ratio:4/3;
+  background:radial-gradient(ellipse at center,#1c2440 0%,#080c14 100%);
+  border:1px solid var(--fab-border);
+  box-shadow:var(--fab-shadow),0 0 60px rgba(26,115,197,.15)
+}
+.mab-acervo #mab3d{width:100%;height:100%;display:block;cursor:grab}
+.mab-acervo #mab3d:active{cursor:grabbing}
+.mab-acervo .model-badge{
+  position:absolute;top:.75rem;right:.75rem;
+  display:flex;align-items:center;gap:.35rem;
+  font-family:var(--fd);font-size:.65rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(11,14,20,.8);border:1px solid var(--fab-gold);
+  border-radius:var(--fab-r-full);padding:.2rem .75rem;color:var(--fab-gold)
+}
+.mab-acervo .mdot{width:6px;height:6px;border-radius:50%;background:var(--fab-gold);
+  animation:mab-pulse 2s ease-in-out infinite}
+@keyframes mab-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.mab-acervo .model-ctrl{
+  position:absolute;bottom:.75rem;left:50%;transform:translateX(-50%);
+  display:flex;gap:.5rem;align-items:center;
+  background:rgba(11,14,20,.78);backdrop-filter:blur(8px);
+  border:1px solid var(--fab-border);border-radius:var(--fab-r-full);
+  padding:.4rem 1rem;white-space:nowrap
+}
+.mab-acervo .ctrl-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:50%;cursor:pointer;
+  color:var(--fab-muted);background:none;border:none;
+  transition:background var(--fab-tr),color var(--fab-tr)
+}
+.mab-acervo .ctrl-btn:hover{background:var(--fab-offset);color:var(--fab-text)}
+.mab-acervo .ctrl-btn.on{background:var(--fab-blue-bg);color:var(--fab-blue)}
+.mab-acervo .ctrl-btn svg{width:14px;height:14px}
+.mab-acervo .ctrl-sep{width:1px;height:18px;background:var(--fab-divider)}
+.mab-acervo .ctrl-hint{font-size:.65rem;color:var(--fab-faint)}
+
+/* ---- LAYOUT CORPO ---- */
+.mab-acervo .body-grid{
+  display:grid;grid-template-columns:1fr 300px;gap:2.5rem;align-items:start;
+  max-width:1100px;margin:0 auto;padding:2.5rem 2rem
+}
+@media(max-width:860px){.mab-acervo .body-grid{grid-template-columns:1fr;padding:1.5rem 1rem}}
+
+/* ---- SEÇÕES DO ARTIGO ---- */
+.mab-acervo .sec{margin-bottom:2.5rem}
+.mab-acervo .sec-label{
+  display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem
+}
+.mab-acervo .sec-label-line{flex:1;height:1px;background:var(--fab-divider)}
+.mab-acervo .sec-label-txt{
+  font-family:var(--fd);font-size:.65rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--fab-gold)
+}
+.mab-acervo .sec h2{
+  font-family:var(--fd);font-weight:700;
+  font-size:clamp(1.4rem,2vw,2rem);color:var(--fab-text);
+  margin-bottom:1rem;padding-left:1rem;
+  border-left:3px solid var(--fab-gold)
+}
+.mab-acervo .sec p{
+  font-size:clamp(.95rem,.9rem + .2vw,1.05rem);
+  color:var(--fab-muted);margin-bottom:1rem;line-height:1.75
+}
+.mab-acervo .sec p strong{color:var(--fab-text);font-weight:600}
+
+/* LINHA DO TEMPO */
+.mab-acervo .tl{position:relative;padding-left:2rem}
+.mab-acervo .tl::before{
+  content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--fab-gold),var(--fab-blue),transparent)
+}
+.mab-acervo .tl-item{position:relative;margin-bottom:1.5rem}
+.mab-acervo .tl-item::before{
+  content:'';position:absolute;left:-1.7rem;top:5px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--fab-gold);border:2px solid var(--fab-bg);
+  box-shadow:0 0 8px var(--fab-gold)
+}
+.mab-acervo .tl-year{
+  font-family:var(--fd);font-weight:700;font-size:.85rem;
+  color:var(--fab-gold);letter-spacing:.1em;margin-bottom:.2rem
+}
+.mab-acervo .tl-desc{font-size:.9rem;color:var(--fab-muted);line-height:1.6}
+
+/* ESPECIFICAÇÕES */
+.mab-acervo .specs{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--fab-divider);
+  border:1px solid var(--fab-divider);border-radius:var(--fab-r-lg);overflow:hidden
+}
+@media(max-width:500px){.mab-acervo .specs{grid-template-columns:1fr}}
+.mab-acervo .spec{background:var(--fab-surface);padding:.9rem 1.2rem}
+.mab-acervo .spec-l{font-size:.65rem;color:var(--fab-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .spec-v{font-family:var(--fd);font-size:1.2rem;font-weight:700;color:var(--fab-text)}
+.mab-acervo .spec-v small{font-family:var(--fb);font-size:.8rem;color:var(--fab-muted);font-weight:400}
+
+/* GALERIA */
+.mab-acervo .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+@media(max-width:600px){.mab-acervo .gallery{grid-template-columns:1fr 1fr}}
+.mab-acervo .gal-item{
+  aspect-ratio:4/3;border-radius:var(--fab-r-md);overflow:hidden;
+  background:var(--fab-offset);border:1px solid var(--fab-border);
+  position:relative;cursor:pointer
+}
+.mab-acervo .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.mab-acervo .gal-item:hover img{transform:scale(1.06)}
+.mab-acervo .gal-cap{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
+  padding:.6rem .6rem .4rem;font-size:.7rem;color:var(--fab-muted)
+}
+
+/* ---- SIDEBAR ---- */
+.mab-acervo .sidebar{min-width:0}
+.mab-acervo .scard{
+  background:var(--fab-surface);border:1px solid var(--fab-border);
+  border-radius:var(--fab-r-xl);overflow:hidden;margin-bottom:1rem
+}
+.mab-acervo .scard-head{
+  padding:.75rem 1.25rem;background:var(--fab-offset);
+  border-bottom:1px solid var(--fab-divider);
+  font-family:var(--fd);font-weight:700;font-size:.75rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--fab-gold);
+  display:flex;align-items:center;gap:.4rem
+}
+.mab-acervo .scard-head svg{width:13px;height:13px}
+.mab-acervo .scard-body{padding:.75rem 1.25rem}
+
+/* Registro */
+.mab-acervo .pid-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.6rem 0;border-bottom:1px solid var(--fab-divider)
+}
+.mab-acervo .pid-row:last-child{border:none}
+.mab-acervo .pid-l{font-size:.7rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em}
+.mab-acervo .pid-v{font-family:var(--fd);font-weight:600;font-size:.9rem;color:var(--fab-text)}
+.mab-acervo .pid-v.mono{font-family:'Courier New',monospace;font-size:.75rem;color:var(--fab-blue)}
+
+/* QR */
+.mab-acervo .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;padding:.75rem 0}
+.mab-acervo .qr-cap{font-size:.7rem;color:var(--fab-muted);text-align:center;line-height:1.5}
+
+/* Botões */
+.mab-acervo .actions{display:flex;flex-direction:column;gap:.5rem}
+.mab-acervo .btn{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.65rem 1rem;border-radius:var(--fab-r-md);
+  font-family:var(--fb);font-size:.875rem;font-weight:600;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:background var(--fab-tr),border-color var(--fab-tr),transform var(--fab-tr)
+}
+.mab-acervo .btn svg{width:15px;height:15px;flex-shrink:0}
+.mab-acervo .btn:active{transform:scale(.98)}
+.mab-acervo .btn-gold{background:var(--fab-gold);color:#0b0e14;font-weight:700}
+.mab-acervo .btn-gold:hover{background:var(--fab-gold-h)}
+.mab-acervo .btn-blue{background:var(--fab-blue);color:#fff}
+.mab-acervo .btn-blue:hover{background:var(--fab-blue-h)}
+.mab-acervo .btn-ghost{background:transparent;border:1px solid var(--fab-border);color:var(--fab-muted)}
+.mab-acervo .btn-ghost:hover{border-color:var(--fab-blue);color:var(--fab-blue);background:var(--fab-blue-bg)}
+
+/* ---- ANIMAÇÕES ---- */
+@keyframes mab-fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.mab-fu{opacity:0;animation:mab-fadeup .6s cubic-bezier(.16,1,.3,1) forwards}
+.mab-d1{animation-delay:.1s}.mab-d2{animation-delay:.2s}.mab-d3{animation-delay:.3s}
+</style>
+
+<!-- ③ HTML DO ARTIGO -->
+<div class="mab-acervo">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+
+      <!-- Coluna esquerda: metadados -->
+      <div class="mab-fu mab-d1">
+        <nav class="bc" aria-label="Caminho">
+          <a href="/index.php/acervo">Acervo</a>
+          <span class="bc-sep">›</span>
+          <span>Aviação Militar</span>
+        </nav>
+
+        <div class="badge-row">
+          <!-- ✏️ EDITE: era histórica, categoria, status -->
+          <span class="badge badge-era">1945–1960</span>
+          <span class="badge badge-cat">Treinamento Avançado</span>
+          <span class="badge badge-ok">✦ Em exposição</span>
+        </div>
+
+        <!-- ✏️ EDITE: nome da aeronave/peça -->
+        <h1 class="piece-title">North American<br>T-6 Texan</h1>
+        <p class="piece-sub">
+          Aeronave de treinamento avançado que formou gerações de aviadores da
+          Força Aérea Brasileira durante a era de ouro da aviação militar nacional.
+        </p>
+
+        <!-- ✏️ EDITE: chips de metadados -->
+        <div class="meta-chips">
+          <div class="mc">
+            <i data-lucide="calendar" class="mc-icon"></i>
+            <div><span class="mc-l">Fabricação</span><span class="mc-v">1943</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="map-pin" class="mc-icon"></i>
+            <div><span class="mc-l">Origem</span><span class="mc-v">EUA</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="gauge" class="mc-icon"></i>
+            <div><span class="mc-l">Vel. máx.</span><span class="mc-v">335 <small>km/h</small></span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="move-horizontal" class="mc-icon"></i>
+            <div><span class="mc-l">Envergadura</span><span class="mc-v">12,8 <small>m</small></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna direita: MODELO 3D -->
+      <div class="model-wrap mab-fu mab-d2">
+        <canvas id="mab3d" aria-label="Modelo 3D interativo — arraste para girar"></canvas>
+        <div class="model-badge"><span class="mdot"></span> Modelo 3D</div>
+        <div class="model-ctrl">
+          <button class="ctrl-btn on" id="mab-btn-rot" title="Rotação automática" aria-label="Alternar rotação automática">
+            <i data-lucide="rotate-cw"></i>
+          </button>
+          <div class="ctrl-sep"></div>
+          <button class="ctrl-btn" id="mab-btn-wf" title="Wireframe" aria-label="Alternar wireframe">
+            <i data-lucide="grid"></i>
+          </button>
+          <div class="ctrl-sep"></div>
+          <span class="ctrl-hint">Arraste para girar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORPO -->
+  <div class="body-grid">
+    <article>
+
+      <!-- CONTEXTO HISTÓRICO -->
+      <div class="sec mab-fu mab-d1">
+        <div class="sec-label">
+          <span class="sec-label-txt">História</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <!-- ✏️ EDITE: texto histórico da peça -->
+        <h2>Contexto Histórico</h2>
+        <p>O <strong>North American T-6 Texan</strong>, conhecido no Brasil como "Mosquito", foi o principal avião de treinamento avançado utilizado pela Força Aérea Brasileira entre 1941 e 1968. Produzido em mais de 15.000 unidades, equipou as forças aéreas de mais de 50 países.</p>
+        <p>Durante a <strong>Segunda Guerra Mundial</strong>, a FAB utilizou o Texan para preparar seus pilotos para combate — muitos integraram o <strong>1° Grupo de Aviação de Caça "Senta a Pua!"</strong>, que atuou na campanha da Itália em 1944-1945.</p>
+      </div>
+
+      <!-- LINHA DO TEMPO -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Cronologia</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Linha do Tempo</h2>
+        <!-- ✏️ EDITE: adicione ou remova <div class="tl-item"> -->
+        <div class="tl" role="list">
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">1935</div>
+            <div class="tl-desc">North American Aviation desenvolve o protótipo NA-16, precursor do T-6.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">1941</div>
+            <div class="tl-desc">Primeiras unidades chegam ao Brasil pelo programa Lend-Lease.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">1944</div>
+            <div class="tl-desc">Pilotos treinados no Texan integram o 1° GAvCa na campanha da Itália.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">1956</div>
+            <div class="tl-desc">Esta aeronave é incorporada à Escola de Aviação Militar em Barbacena/MG.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">1968</div>
+            <div class="tl-desc">Retirada de operação e preservada para o acervo do MAB.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FICHA TÉCNICA -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Ficha Técnica</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Especificações Técnicas</h2>
+        <!-- ✏️ EDITE: dados técnicos da peça -->
+        <div class="specs" role="table" aria-label="Especificações técnicas">
+          <div class="spec"><div class="spec-l">Motor</div><div class="spec-v">Pratt &amp; Whitney <small>R-1340-AN-1</small></div></div>
+          <div class="spec"><div class="spec-l">Potência</div><div class="spec-v">600 <small>HP</small></div></div>
+          <div class="spec"><div class="spec-l">Comprimento</div><div class="spec-v">8,99 <small>m</small></div></div>
+          <div class="spec"><div class="spec-l">Envergadura</div><div class="spec-v">12,8 <small>m</small></div></div>
+          <div class="spec"><div class="spec-l">Altura</div><div class="spec-v">3,57 <small>m</small></div></div>
+          <div class="spec"><div class="spec-l">Peso máximo</div><div class="spec-v">2.404 <small>kg</small></div></div>
+          <div class="spec"><div class="spec-l">Vel. máxima</div><div class="spec-v">335 <small>km/h</small></div></div>
+          <div class="spec"><div class="spec-l">Teto operacional</div><div class="spec-v">7.467 <small>m</small></div></div>
+          <div class="spec"><div class="spec-l">Autonomia</div><div class="spec-v">1.207 <small>km</small></div></div>
+          <div class="spec"><div class="spec-l">Tripulação</div><div class="spec-v">2 <small>pilotos (tandem)</small></div></div>
+        </div>
+      </div>
+
+      <!-- GALERIA -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Galeria</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Registros Fotográficos</h2>
+        <!-- ✏️ EDITE: troque os src pelas URLs reais das imagens no MAB -->
+        <div class="gallery">
+          <div class="gal-item">
+            <img src="https://picsum.photos/seed/mab-cockpit/400/300" alt="Cabine do T-6 Texan" width="400" height="300" loading="lazy">
+            <div class="gal-cap">Vista da cabine</div>
+          </div>
+          <div class="gal-item">
+            <img src="https://picsum.photos/seed/mab-engine/400/300" alt="Motor radial" width="400" height="300" loading="lazy">
+            <div class="gal-cap">Motor P&amp;W R-1340</div>
+          </div>
+          <div class="gal-item">
+            <img src="https://picsum.photos/seed/mab-fuselage/400/300" alt="Fuselagem" width="400" height="300" loading="lazy">
+            <div class="gal-cap">Fuselagem e asa</div>
+          </div>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Registro do acervo">
+
+      <!-- Registro -->
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="database"></i> Registro de Acervo</div>
+        <div class="scard-body">
+          <!-- ✏️ EDITE: dados de tombamento -->
+          <div class="pid-row"><span class="pid-l">Nº Tombamento</span><span class="pid-v mono">MAB-1968-0042</span></div>
+          <div class="pid-row"><span class="pid-l">Categoria</span><span class="pid-v">Aeronave</span></div>
+          <div class="pid-row"><span class="pid-l">Subcategoria</span><span class="pid-v">Treinamento</span></div>
+          <div class="pid-row"><span class="pid-l">Conservação</span><span class="pid-v" style="color:var(--fab-green)">Excelente</span></div>
+          <div class="pid-row"><span class="pid-l">Localização</span><span class="pid-v">Hangar B — Box 14</span></div>
+          <div class="pid-row"><span class="pid-l">Última vistoria</span><span class="pid-v">mar/2025</span></div>
+        </div>
+      </div>
+
+      <!-- QR Code -->
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="qr-code"></i> Acesso Rápido</div>
+        <div class="scard-body">
+          <div class="qr-wrap">
+            <!-- QR Code SVG decorativo — substitua por QR real gerado via qrcode.js ou serviço externo -->
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" aria-label="QR Code desta página">
+              <rect width="110" height="110" rx="6" fill="#111520"/>
+              <rect x="6" y="6" width="34" height="34" rx="3" fill="#c8a84b" fill-opacity=".12" stroke="#c8a84b" stroke-width="1.5"/>
+              <rect x="12" y="12" width="22" height="22" rx="2" fill="#c8a84b" fill-opacity=".25"/>
+              <rect x="17" y="17" width="12" height="12" fill="#c8a84b"/>
+              <rect x="70" y="6" width="34" height="34" rx="3" fill="#c8a84b" fill-opacity=".12" stroke="#c8a84b" stroke-width="1.5"/>
+              <rect x="76" y="12" width="22" height="22" rx="2" fill="#c8a84b" fill-opacity=".25"/>
+              <rect x="81" y="17" width="12" height="12" fill="#c8a84b"/>
+              <rect x="6" y="70" width="34" height="34" rx="3" fill="#c8a84b" fill-opacity=".12" stroke="#c8a84b" stroke-width="1.5"/>
+              <rect x="12" y="76" width="22" height="22" rx="2" fill="#c8a84b" fill-opacity=".25"/>
+              <rect x="17" y="81" width="12" height="12" fill="#c8a84b"/>
+              <rect x="46" y="8" width="6" height="6" fill="#c8a84b" fill-opacity=".5"/>
+              <rect x="54" y="8" width="6" height="6" fill="#c8a84b" fill-opacity=".7"/>
+              <rect x="50" y="16" width="6" height="6" fill="#c8a84b" fill-opacity=".4"/>
+              <rect x="48" y="46" width="6" height="6" fill="#c8a84b" fill-opacity=".5"/>
+              <rect x="56" y="50" width="6" height="6" fill="#1a73c5" fill-opacity=".6"/>
+              <rect x="48" y="56" width="4" height="4" fill="#c8a84b" fill-opacity=".7"/>
+              <rect x="64" y="48" width="6" height="6" fill="#1a73c5" fill-opacity=".5"/>
+              <rect x="72" y="52" width="4" height="4" fill="#c8a84b" fill-opacity=".4"/>
+              <rect x="48" y="70" width="6" height="6" fill="#1a73c5" fill-opacity=".6"/>
+              <rect x="56" y="74" width="6" height="6" fill="#c8a84b" fill-opacity=".4"/>
+              <rect x="64" y="70" width="4" height="4" fill="#1a73c5" fill-opacity=".5"/>
+              <rect x="72" y="76" width="6" height="6" fill="#c8a84b" fill-opacity=".7"/>
+              <rect x="84" y="80" width="6" height="6" fill="#c8a84b" fill-opacity=".5"/>
+              <rect x="96" y="70" width="8" height="4" fill="#1a73c5" fill-opacity=".4"/>
+            </svg>
+            <p class="qr-cap">Aponte a câmera do celular<br>para acessar este registro</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ações -->
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="share-2"></i> Ações</div>
+        <div class="scard-body">
+          <div class="actions">
+            <!-- ✏️ EDITE: links de ação -->
+            <a href="#" class="btn btn-gold"><i data-lucide="box"></i> Visualizar em AR</a>
+            <a href="#" class="btn btn-blue"><i data-lucide="download"></i> Ficha Técnica (PDF)</a>
+            <a href="#" class="btn btn-ghost"><i data-lucide="share-2"></i> Compartilhar</a>
+            <a href="#" class="btn btn-ghost"><i data-lucide="flag"></i> Sugerir correção</a>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div><!-- /mab-acervo -->
+
+<!-- ④ SCRIPTS (colocados ao final para não bloquear renderização) -->
+<script>
+(function(){
+  // Aguarda libs carregarem
+  function init(){
+    if(typeof THREE === 'undefined' || typeof lucide === 'undefined'){
+      return setTimeout(init,120);
+    }
+    lucide.createIcons({attrs:{width:14,height:14}});
+    initModel();
+    initScrollAnim();
+  }
+  init();
+
+  /* -------- THREE.JS: MODELO 3D -------- */
+  function initModel(){
+    var canvas = document.getElementById('mab3d');
+    if(!canvas) return;
+    var W = canvas.parentElement.clientWidth,
+        H = canvas.parentElement.clientHeight;
+
+    var renderer = new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(W,H);
+    renderer.shadowMap.enabled=true;
+
+    var scene  = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(45,W/H,0.1,100);
+    camera.position.set(3.5,1.5,4);
+    camera.lookAt(0,0,0);
+
+    scene.add(new THREE.AmbientLight(0x223366,0.6));
+    var kl=new THREE.DirectionalLight(0xc8c0f0,1.8); kl.position.set(5,8,5); kl.castShadow=true; scene.add(kl);
+    var fl=new THREE.DirectionalLight(0x1a73c5,0.6); fl.position.set(-5,2,-5); scene.add(fl);
+    var rl=new THREE.DirectionalLight(0xc8a84b,0.4); rl.position.set(0,-3,-6); scene.add(rl);
+
+    var mat  = new THREE.MeshStandardMaterial({color:0x8fa8cc,roughness:.3,metalness:.7});
+    var matW = new THREE.MeshStandardMaterial({color:0x6888aa,roughness:.25,metalness:.75});
+    var matG = new THREE.MeshStandardMaterial({color:0xc8a84b,roughness:.2,metalness:.9,emissive:0xc8a84b,emissiveIntensity:.1});
+    var matC = new THREE.MeshStandardMaterial({color:0x88ccee,roughness:.05,metalness:.1,transparent:true,opacity:.55});
+    var matD = new THREE.MeshStandardMaterial({color:0x223355,roughness:.5,metalness:.4});
+
+    var g = new THREE.Group();
+
+    // Fuselagem
+    var f=new THREE.Mesh(new THREE.CylinderGeometry(.22,.12,3.2,12),mat); f.rotation.z=Math.PI/2; f.castShadow=true; g.add(f);
+    var nose=new THREE.Mesh(new THREE.SphereGeometry(.22,10,8,0,Math.PI*2,0,Math.PI/2),mat); nose.position.set(1.6,0,0); nose.rotation.z=-Math.PI/2; g.add(nose);
+    var cowl=new THREE.Mesh(new THREE.CylinderGeometry(.28,.25,.4,14),matD); cowl.rotation.z=Math.PI/2; cowl.position.set(1.8,0,0); g.add(cowl);
+
+    // Hélice
+    var hub=new THREE.Mesh(new THREE.SphereGeometry(.07,8,8),matG); hub.position.set(2.05,0,0); g.add(hub);
+    for(var i=0;i<3;i++){
+      var bl=new THREE.Mesh(new THREE.BoxGeometry(.06,.9,.04),matD);
+      bl.position.set(2.08,0,0); bl.rotation.x=(i/3)*Math.PI*2;
+      bl.geometry.translate(0,.45,0); g.add(bl);
+    }
+
+    // Asa
+    var ws=new THREE.Shape();
+    ws.moveTo(0,-2.1);ws.lineTo(.5,-2.1);ws.lineTo(.8,-.9);ws.lineTo(.2,.1);ws.lineTo(-.1,.1);ws.lineTo(-.1,-2.1);
+    var wg=new THREE.ExtrudeGeometry(ws,{depth:.06,bevelEnabled:false});
+    var w=new THREE.Mesh(wg,matW); w.rotation.y=Math.PI/2; w.rotation.x=Math.PI/2; w.position.set(-.1,-.06,0); w.castShadow=true; g.add(w);
+    var wr=w.clone(); wr.scale.z=-1; g.add(wr);
+
+    // Cauda vertical
+    var tvs=new THREE.Shape();
+    tvs.moveTo(0,0);tvs.lineTo(-.6,0);tvs.lineTo(-.9,.65);tvs.lineTo(-.35,.65);tvs.lineTo(0,.15);
+    var tv=new THREE.Mesh(new THREE.ExtrudeGeometry(tvs,{depth:.05,bevelEnabled:false}),matW);
+    tv.position.set(-1.55,0,0); tv.rotation.y=Math.PI/2; g.add(tv);
+
+    // Cauda horizontal
+    var ths=new THREE.Shape();
+    ths.moveTo(0,-.8);ths.lineTo(.2,-.8);ths.lineTo(.3,-.1);ths.lineTo(0,.1);ths.lineTo(-.05,.1);ths.lineTo(-.05,-.8);
+    var th=new THREE.Mesh(new THREE.ExtrudeGeometry(ths,{depth:.04,bevelEnabled:false}),matW);
+    th.rotation.y=Math.PI/2; th.rotation.x=Math.PI/2; th.position.set(-1.4,.1,0); g.add(th);
+    var thr=th.clone(); thr.scale.z=-1; g.add(thr);
+
+    // Canopy
+    var cn=new THREE.Mesh(new THREE.SphereGeometry(.22,10,6,0,Math.PI*2,0,Math.PI*.55),matC);
+    cn.position.set(.4,.18,0); g.add(cn);
+
+    // Listras douradas
+    var st=new THREE.Mesh(new THREE.CylinderGeometry(.225,.225,.08,12),matG);
+    st.rotation.z=Math.PI/2; st.position.set(.9,0,0); g.add(st);
+    var st2=st.clone(); st2.position.set(-.7,0,0); g.add(st2);
+
+    // Trem de pouso
+    var gm=new THREE.MeshStandardMaterial({color:0x333344,roughness:.6,metalness:.5});
+    var gs=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.5,6),gm);
+    gs.position.set(.1,-.5,.6); g.add(gs);
+    var gsr=gs.clone(); gsr.position.z=-.6; g.add(gsr);
+    var wh=new THREE.Mesh(new THREE.TorusGeometry(.09,.04,6,12),gm);
+    wh.position.set(.1,-.75,.6); wh.rotation.x=Math.PI/2; g.add(wh);
+    var whr=wh.clone(); whr.position.z=-.6; g.add(whr);
+
+    scene.add(g);
+    g.position.y=-.1;
+
+    var grd=new THREE.Mesh(new THREE.PlaneGeometry(10,10),new THREE.MeshStandardMaterial({color:0x0d1020,roughness:.9}));
+    grd.rotation.x=-Math.PI/2; grd.position.y=-.82; grd.receiveShadow=true; scene.add(grd);
+    var gh=new THREE.GridHelper(8,16,0x1a2040,0x1a2040); gh.position.y=-.81; scene.add(gh);
+
+    var autoRot=true, wf=false, drag=false, px=0, py=0, ry=.2, rx=.06, pa=0;
+
+    document.getElementById('mab-btn-rot').addEventListener('click',function(){
+      autoRot=!autoRot; this.classList.toggle('on',autoRot);
+    });
+    document.getElementById('mab-btn-wf').addEventListener('click',function(){
+      wf=!wf; this.classList.toggle('on',wf);
+      g.traverse(function(o){ if(o.isMesh && o.material!==matC) o.material.wireframe=wf; });
+    });
+    canvas.addEventListener('mousedown',function(e){drag=true;px=e.clientX;py=e.clientY;autoRot=false;document.getElementById('mab-btn-rot').classList.remove('on')});
+    window.addEventListener('mouseup',function(){drag=false});
+    window.addEventListener('mousemove',function(e){if(!drag)return;ry+=(e.clientX-px)*.01;rx+=(e.clientY-py)*.005;rx=Math.max(-.4,Math.min(.4,rx));px=e.clientX;py=e.clientY});
+    canvas.addEventListener('touchstart',function(e){drag=true;px=e.touches[0].clientX;py=e.touches[0].clientY;autoRot=false},{passive:true});
+    window.addEventListener('touchend',function(){drag=false});
+    window.addEventListener('touchmove',function(e){if(!drag)return;ry+=(e.touches[0].clientX-px)*.012;rx+=(e.touches[0].clientY-py)*.006;rx=Math.max(-.4,Math.min(.4,rx));px=e.touches[0].clientX;py=e.touches[0].clientY},{passive:true});
+
+    var clock=new THREE.Clock();
+    (function tick(){
+      requestAnimationFrame(tick);
+      var d=clock.getDelta(); pa+=d*6.5;
+      var bi=0;
+      g.children.forEach(function(c){
+        if(c.geometry&&c.geometry.type==='BoxGeometry'){c.rotation.x=(bi*Math.PI*2/3)+pa;bi++;}
+      });
+      if(autoRot) ry+=d*.45;
+      g.rotation.y=ry; g.rotation.x=rx;
+      var cw=canvas.parentElement.clientWidth, ch=canvas.parentElement.clientHeight;
+      if(renderer.domElement.width!==cw||renderer.domElement.height!==ch){
+        renderer.setSize(cw,ch); camera.aspect=cw/ch; camera.updateProjectionMatrix();
+      }
+      renderer.render(scene,camera);
+    })();
+  }
+
+  /* -------- ANIMAÇÕES DE SCROLL -------- */
+  function initScrollAnim(){
+    if(!('IntersectionObserver' in window)) return;
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.style.animationPlayState='running';
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:.1});
+    document.querySelectorAll('.mab-acervo .mab-fu').forEach(function(el){
+      el.style.animationPlayState='paused'; obs.observe(el);
+    });
+  }
+})();
+</script>
