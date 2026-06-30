@@ -115,6 +115,13 @@
 .mab-acervo .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
 .mab-acervo .gal-item:hover img{transform:scale(1.06)}
 .mab-acervo .gal-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);padding:.6rem .6rem .4rem;font-size:.7rem;color:var(--fab-muted)}
+.mab-acervo .lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(5,8,14,.88);backdrop-filter:blur(4px)}
+.mab-acervo .lightbox.is-open{display:flex}
+.mab-acervo .lightbox-media{position:relative;max-width:min(95vw,1100px);max-height:88vh}
+.mab-acervo .lightbox-img{display:block;max-width:100%;max-height:88vh;width:auto;height:auto;border-radius:var(--fab-r-md);border:1px solid var(--fab-border);box-shadow:var(--fab-shadow)}
+.mab-acervo .lightbox-close{position:absolute;top:.5rem;right:.5rem;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--fab-r-full);border:1px solid var(--fab-border);background:rgba(11,14,20,.75);color:var(--fab-text);cursor:pointer;transition:background var(--fab-tr),transform var(--fab-tr)}
+.mab-acervo .lightbox-close:hover{background:var(--fab-blue-bg)}
+.mab-acervo .lightbox-close:active{transform:scale(.96)}
 .mab-acervo .sidebar{min-width:0}
 .mab-acervo .scard{background:var(--fab-surface);border:1px solid var(--fab-border);border-radius:var(--fab-r-xl);overflow:hidden;margin-bottom:1rem}
 .mab-acervo .scard-head{padding:.75rem 1.25rem;background:var(--fab-offset);border-bottom:1px solid var(--fab-divider);font-family:var(--fd);font-weight:700;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fab-gold);display:flex;align-items:center;gap:.4rem}
@@ -309,17 +316,14 @@
         </div>
         <h2>Registros Fotográficos</h2>
         <div class="gallery">
-          <div class="gal-item">
-            <img src="https://picsum.photos/seed/bandeirante-cockpit/400/300" alt="Cabine do EMB-110" width="400" height="300" loading="lazy">
-            <div class="gal-cap">Cabine de pilotagem</div>
+          <div class="gal-item" role="button" tabindex="0" aria-label="Ampliar foto: Embraer EMB-110 Bandeirante em voo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c2/G-TABS2.JPG" alt="Embraer EMB-110 Bandeirante em voo" width="400" height="300" loading="lazy">
           </div>
-          <div class="gal-item">
-            <img src="https://picsum.photos/seed/bandeirante-engine/400/300" alt="Motor PT6A-34" width="400" height="300" loading="lazy">
-            <div class="gal-cap">Motor P&amp;W PT6A-34</div>
+          <div class="gal-item" role="button" tabindex="0" aria-label="Ampliar foto: Embraer EMB-110 Bandeirante ambulância aérea">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Ambulancia_a%C3%A9rea_del_IMSS.png" alt="Embraer EMB-110 Bandeirante ambulância aérea" width="400" height="300" loading="lazy">
           </div>
-          <div class="gal-item">
-            <img src="https://picsum.photos/seed/bandeirante-tail/400/300" alt="Cauda do Bandeirante" width="400" height="300" loading="lazy">
-            <div class="gal-cap">Empenagem e cauda</div>
+          <div class="gal-item" role="button" tabindex="0" aria-label="Ampliar foto: Embraer EMB-110 Bandeirante em hangar">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/TG-TAY_Embraer_Emb.110_TAG_%287475007508%29.jpg" alt="Embraer EMB-110 Bandeirante em hangar" width="400" height="300" loading="lazy">
           </div>
         </div>
       </div>
@@ -385,6 +389,15 @@
       </div>
     </aside>
   </div>
+
+  <div class="lightbox" id="mab-lightbox" aria-hidden="true">
+    <div class="lightbox-media" role="dialog" aria-modal="true" aria-label="Visualização ampliada da foto">
+      <button class="lightbox-close" id="mab-lightbox-close" type="button" aria-label="Fechar visualização">
+        <i data-lucide="x"></i>
+      </button>
+      <img class="lightbox-img" id="mab-lightbox-img" src="" alt="">
+    </div>
+  </div>
 </div>
 
 <!-- ④ SCRIPTS -->
@@ -409,9 +422,52 @@
         console.error('[MAB model-viewer] Erro ao carregar GLB:', e);
       });
     }
+    initGalleryLightbox();
     initScrollAnim();
   }
   init();
+
+  function initGalleryLightbox(){
+    var lightbox = document.getElementById('mab-lightbox');
+    var lightboxImg = document.getElementById('mab-lightbox-img');
+    var closeBtn = document.getElementById('mab-lightbox-close');
+    if(!lightbox || !lightboxImg || !closeBtn) return;
+
+    var open = function(item){
+      var img = item.querySelector('img');
+      if(!img) return;
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt || 'Imagem ampliada';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    var close = function(){
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = '';
+      document.body.style.overflow = '';
+    };
+
+    document.querySelectorAll('.mab-acervo .gal-item').forEach(function(item){
+      item.addEventListener('click', function(){ open(item); });
+      item.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          open(item);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    lightbox.addEventListener('click', function(e){
+      if(e.target === lightbox) close();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && lightbox.classList.contains('is-open')) close();
+    });
+  }
 
   function initScrollAnim(){
     if(!('IntersectionObserver' in window)) return;
@@ -426,6 +482,87 @@
     document.querySelectorAll('.mab-acervo .mab-fu').forEach(function(el){
       el.style.animationPlayState = 'paused';
       obs.observe(el);
+    });
+  }
+})();
+</script>
+
+<script>
+(function(){
+  function centerModelIfSmall(){
+    const wrap = document.querySelector('.model-wrap');
+    const mv = document.querySelector('model-viewer');
+    if(!wrap || !mv) return;
+    const r = wrap.getBoundingClientRect();
+    const small = r.width < 720 || r.height < 520;
+    if(small){
+      wrap.style.display = 'flex';
+      wrap.style.alignItems = 'center';
+      wrap.style.justifyContent = 'center';
+      mv.style.maxWidth = '100%';
+      mv.style.maxHeight = '100%';
+      mv.style.width = '100%';
+      mv.style.height = '100%';
+      mv.style.objectFit = 'contain';
+      mv.style.display = 'block';
+      mv.style.margin = 'auto';
+    }
+  }
+  window.addEventListener('load', centerModelIfSmall);
+  window.addEventListener('resize', centerModelIfSmall);
+  const target = document.documentElement;
+  if (window.ResizeObserver) new ResizeObserver(centerModelIfSmall).observe(target);
+})();
+</script>
+
+<style>
+.model-wrap, .model-frame {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+model-viewer {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+  margin: auto !important;
+  object-fit: contain !important;
+}
+</style>
+<script>
+(function(){
+  function fitModelInFrame(){
+    const wrap = document.querySelector('.model-wrap, .model-frame');
+    const mv = document.querySelector('model-viewer');
+    if(!wrap || !mv) return;
+    const r = wrap.getBoundingClientRect();
+    const small = r.width < 720 || r.height < 520;
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.justifyContent = 'center';
+    wrap.style.overflow = 'hidden';
+    mv.style.width = '100%';
+    mv.style.height = '100%';
+    mv.style.maxWidth = '100%';
+    mv.style.maxHeight = '100%';
+    mv.style.display = 'block';
+    mv.style.margin = 'auto';
+    mv.style.objectFit = 'contain';
+    if (small) mv.setAttribute('camera-controls', '');
+    if (typeof mv.updateFraming === 'function') mv.updateFraming();
+  }
+  const run = () => requestAnimationFrame(fitModelInFrame);
+  window.addEventListener('load', run);
+  window.addEventListener('resize', run);
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(run);
+    ro.observe(document.documentElement);
+    document.addEventListener('DOMContentLoaded', () => {
+      const wrap = document.querySelector('.model-wrap, .model-frame');
+      if (wrap) ro.observe(wrap);
     });
   }
 })();
