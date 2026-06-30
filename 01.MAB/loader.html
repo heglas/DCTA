@@ -18,44 +18,57 @@
         const contentDiv = document.getElementById('content');
         const loadingDiv = document.getElementById('loading');
         
-        const htmlUrl = 'https://raw.githubusercontent.com/heglas/DCTA/7e43756e67cd91606cffa990fe2535cb0d521b22/01.MAB/Catalogo-Acervo.html';
-        const jsonUrl = 'https://raw.githubusercontent.com/heglas/DCTA/7e43756e67cd91606cffa990fe2535cb0d521b22/01.MAB/acervoData.json';
+        const htmlUrl = 'https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/Catalogo-Acervo.html';
+        const jsonUrl = 'https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/acervoData.json';
         
         async function loadContent() {
             try {
+                console.log('Iniciando carregamento...');
+                
                 // Carrega o HTML
+                console.log('Carregando HTML de:', htmlUrl);
                 const htmlResponse = await fetch(htmlUrl);
                 if (!htmlResponse.ok) throw new Error(`HTML: HTTP ${htmlResponse.status}`);
                 let html = await htmlResponse.text();
-                
-                // Carrega o JSON de dados
-                const jsonResponse = await fetch(jsonUrl);
-                if (!jsonResponse.ok) throw new Error(`JSON: HTTP ${jsonResponse.status}`);
-                const acervoData = await jsonResponse.json();
+                console.log('HTML carregado com sucesso');
                 
                 // Injeta o conteúdo HTML
                 contentDiv.innerHTML = html;
                 loadingDiv.style.display = 'none';
                 contentDiv.style.display = 'block';
                 
-                // Aguarda o script do HTML estar pronto e substitui os dados
-                setTimeout(() => {
-                    try {
-                        // Executa o script do HTML injetado para que ele possa usar acervoData
-                        const script = contentDiv.querySelector('script');
-                        if (script) {
-                            // Cria um novo contexto com acervoData disponível
-                            const newScript = document.createElement('script');
-                            newScript.textContent = `
-                                const acervoData = ${JSON.stringify(acervoData)};
-                                ${script.textContent.replace(/const acervoData = \[[\s\S]*?\];/, '')}
-                            `;
-                            script.parentNode.replaceChild(newScript, script);
-                        }
-                    } catch (e) {
-                        console.error('Erro ao atualizar dados:', e);
+                // Tenta carregar o JSON de dados
+                console.log('Carregando JSON de:', jsonUrl);
+                try {
+                    const jsonResponse = await fetch(jsonUrl);
+                    if (jsonResponse.ok) {
+                        const acervoData = await jsonResponse.json();
+                        console.log('JSON carregado com sucesso');
+                        
+                        // Substitui os dados no script
+                        setTimeout(() => {
+                            try {
+                                // Remove o script antigo e cria um novo com os dados do JSON
+                                const oldScript = contentDiv.querySelector('script');
+                                if (oldScript) {
+                                    const newScript = document.createElement('script');
+                                    const scriptContent = oldScript.textContent;
+                                    // Remove a definição antiga de acervoData
+                                    const cleanedContent = scriptContent.replace(/const acervoData = \[[\s\S]*?\];/, '');
+                                    newScript.textContent = `const acervoData = ${JSON.stringify(acervoData)};\n${cleanedContent}`;
+                                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                                    console.log('Dados do JSON injetados com sucesso');
+                                }
+                            } catch (e) {
+                                console.error('Erro ao injetar dados do JSON:', e);
+                            }
+                        }, 100);
+                    } else {
+                        console.warn('JSON não encontrado, usando dados do HTML');
                     }
-                }, 100);
+                } catch (jsonError) {
+                    console.warn('Erro ao carregar JSON, usando dados do HTML:', jsonError.message);
+                }
                 
             } catch (error) {
                 console.error('Erro ao carregar:', error);
