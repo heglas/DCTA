@@ -1,0 +1,486 @@
+<!-- ============================================================
+     MAB — ACERVO DIGITAL | Artigo Joomla — TEMPLATE GENÉRICO
+     
+     INSTRUÇÕES DE USO:
+     1. Substitua todos os valores entre [[ ]] pelos dados do acervo
+     2. Personalize as cores usando os temas:
+        - AZUL (default): --fab-blue, --fab-gold, progressbar gold
+        - VERMELHO (armamento): --fab-red, --fab-gold, progressbar red
+     3. Adicione/remova badges conforme necessário (badge-era, badge-cat, badge-ok, badge-red)
+     4. URLs do GLB devem ser convertidas para raw.githubusercontent.com
+     5. Adicione até 3 imagens na galeria (gal-item)
+     6. Customize os specs (especificações técnicas) conforme o item
+     7. Atualize o QR code SVG se necessário (ou use placeholder)
+============================================================ -->
+
+<!-- ① FONTES E LIBS EXTERNAS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- Model-viewer library (DEVE ser carregado fora de div) -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+<!-- ② ESTILOS ESCOPADOS -->
+<style>
+.mab-acervo *,.mab-acervo *::before,.mab-acervo *::after{box-sizing:border-box}
+.mab-acervo {
+  --fab-bg:#0b0e14;--fab-surface:#111520;--fab-s2:#16192a;
+  --fab-offset:#1c2035;--fab-dynamic:#242843;--fab-divider:#2a2f4a;
+  --fab-border:#363c5c;--fab-text:#e8eaf0;--fab-muted:#8b92b0;
+  --fab-faint:#4a5070;--fab-blue:#1a73c5;--fab-blue-h:#1560a8;
+  --fab-blue-bg:#0f1e35;--fab-gold:#c8a84b;--fab-gold-h:#b8952e;
+  --fab-gold-bg:#251e0a;--fab-green:#4caf50;
+  --fab-red:#e53935;--fab-red-h:#c62828;--fab-red-bg:#1a0a0a;
+  --fab-r-sm:.25rem;--fab-r-md:.5rem;--fab-r-lg:.75rem;
+  --fab-r-xl:1rem;--fab-r-full:9999px;
+  --fab-shadow:0 4px 20px rgba(0,0,0,.5);
+  --fab-tr:180ms cubic-bezier(.16,1,.3,1);
+  --fd:'Barlow Condensed','Arial Narrow',sans-serif;
+  --fb:'Barlow','Helvetica Neue',sans-serif;
+  font-family:var(--fb);
+  font-size:clamp(1rem,.95rem + .25vw,1.125rem);
+  color:var(--fab-text);background:var(--fab-bg);
+  border-radius:var(--fab-r-xl);overflow:hidden;line-height:1.65;
+}
+.mab-acervo .hero{position:relative;overflow:hidden;background:var(--fab-surface);border-bottom:1px solid var(--fab-divider)}
+.mab-acervo .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(to right,var(--fab-divider) 1px,transparent 1px),linear-gradient(to bottom,var(--fab-divider) 1px,transparent 1px);background-size:48px 48px;opacity:.18;pointer-events:none;z-index:0}
+.mab-acervo .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,var(--fab-bg));pointer-events:none;z-index:1}
+.mab-acervo .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center;padding:3rem 2rem 2rem;max-width:1100px;margin:0 auto}
+@media(max-width:860px){.mab-acervo .hero-grid{grid-template-columns:1fr;padding:2rem 1rem 1.5rem}}
+.mab-acervo .bc{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--fab-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem}
+.mab-acervo .bc a{color:var(--fab-muted);text-decoration:none;transition:color var(--fab-tr)}
+.mab-acervo .bc a:hover{color:var(--fab-gold)}
+.mab-acervo .bc-sep{color:var(--fab-faint)}
+.mab-acervo .badge-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.mab-acervo .badge{font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .7rem;border-radius:var(--fab-r-sm);border:1px solid}
+.mab-acervo .badge-era{color:var(--fab-gold);border-color:var(--fab-gold);background:var(--fab-gold-bg)}
+.mab-acervo .badge-cat{color:var(--fab-blue);border-color:var(--fab-blue);background:var(--fab-blue-bg)}
+.mab-acervo .badge-red{color:var(--fab-red);border-color:var(--fab-red);background:var(--fab-red-bg)}
+.mab-acervo .badge-ok{color:var(--fab-green);border-color:#2e7d32;background:rgba(46,125,50,.12)}
+.mab-acervo .piece-title{font-family:var(--fd);font-weight:800;font-size:clamp(2.2rem,5vw,4.5rem);line-height:1.05;letter-spacing:.01em;color:var(--fab-text);margin-bottom:.75rem}
+.mab-acervo .piece-sub{font-size:clamp(.95rem,1vw,1.05rem);color:var(--fab-muted);margin-bottom:1.5rem;line-height:1.6;max-width:52ch}
+.mab-acervo .meta-chips{display:flex;flex-wrap:wrap;gap:.75rem}
+.mab-acervo .mc{display:flex;align-items:center;gap:.5rem;background:var(--fab-offset);border:1px solid var(--fab-border);border-radius:var(--fab-r-lg);padding:.4rem .75rem}
+.mab-acervo .mc svg{color:var(--fab-gold);width:15px;height:15px;flex-shrink:0}
+.mab-acervo .mc-l{font-size:.65rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em;display:block}
+.mab-acervo .mc-v{font-family:var(--fd);font-weight:700;font-size:.95rem;color:var(--fab-text)}
+.mab-acervo .mc-v small{font-family:var(--fb);font-weight:400;font-size:.8rem;color:var(--fab-muted)}
+.mab-acervo .model-wrap{
+  position:relative;border-radius:var(--fab-r-xl);overflow:hidden;
+  aspect-ratio:4/3;
+  background:radial-gradient(ellipse at center,#1c2440 0%,#080c14 100%);
+  border:1px solid var(--fab-border);
+  box-shadow:var(--fab-shadow),0 0 60px rgba(26,115,197,.15);
+  display:block;
+}
+.mab-acervo model-viewer {
+  width:100%;
+  height:100%;
+  min-height:320px;
+  border-radius:var(--fab-r-xl);
+  background:radial-gradient(ellipse at center,#1c2440,#080c14);
+  --poster-color:transparent;
+}
+.mab-acervo .model-badge{position:absolute;top:.75rem;right:.75rem;display:flex;align-items:center;gap:.35rem;font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(11,14,20,.8);border:1px solid var(--fab-gold);border-radius:var(--fab-r-full);padding:.2rem .75rem;color:var(--fab-gold);z-index:10;pointer-events:none}
+.mab-acervo .mdot{width:6px;height:6px;border-radius:50%;background:var(--fab-gold);animation:mab-pulse 2s ease-in-out infinite}
+@keyframes mab-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.mab-acervo .body-grid{display:grid;grid-template-columns:1fr 300px;gap:2.5rem;align-items:start;max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+@media(max-width:860px){.mab-acervo .body-grid{grid-template-columns:1fr;padding:1.5rem 1rem}}
+.mab-acervo .sec{margin-bottom:2.5rem}
+.mab-acervo .sec-label{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.mab-acervo .sec-label-line{flex:1;height:1px;background:var(--fab-divider)}
+.mab-acervo .sec-label-txt{font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--fab-gold)}
+.mab-acervo .sec h2{font-family:var(--fd);font-weight:700;font-size:clamp(1.4rem,2vw,2rem);color:var(--fab-text);margin-bottom:1rem;padding-left:1rem;border-left:3px solid var(--fab-gold)}
+.mab-acervo .sec p{font-size:clamp(.95rem,.9rem + .2vw,1.05rem);color:var(--fab-muted);margin-bottom:1rem;line-height:1.75}
+.mab-acervo .sec p strong{color:var(--fab-text);font-weight:600}
+.mab-acervo .tl{position:relative;padding-left:2rem}
+.mab-acervo .tl::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--fab-gold),var(--fab-blue),transparent)}
+.mab-acervo .tl-item{position:relative;margin-bottom:1.5rem}
+.mab-acervo .tl-item::before{content:'';position:absolute;left:-1.7rem;top:5px;width:12px;height:12px;border-radius:50%;background:var(--fab-gold);border:2px solid var(--fab-bg);box-shadow:0 0 8px var(--fab-gold)}
+.mab-acervo .tl-year{font-family:var(--fd);font-weight:700;font-size:.85rem;color:var(--fab-gold);letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .tl-desc{font-size:.9rem;color:var(--fab-muted);line-height:1.6}
+.mab-acervo .specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--fab-divider);border:1px solid var(--fab-divider);border-radius:var(--fab-r-lg);overflow:hidden}
+@media(max-width:500px){.mab-acervo .specs{grid-template-columns:1fr}}
+.mab-acervo .spec{background:var(--fab-surface);padding:.9rem 1.2rem}
+.mab-acervo .spec-l{font-size:.65rem;color:var(--fab-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .spec-v{font-family:var(--fd);font-size:1.2rem;font-weight:700;color:var(--fab-text)}
+.mab-acervo .spec-v small{font-family:var(--fb);font-size:.8rem;color:var(--fab-muted);font-weight:400}
+.mab-acervo .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+@media(max-width:600px){.mab-acervo .gallery{grid-template-columns:1fr 1fr}}
+.mab-acervo .gal-item{aspect-ratio:4/3;border-radius:var(--fab-r-md);overflow:hidden;background:var(--fab-offset);border:1px solid var(--fab-border);position:relative;cursor:pointer}
+.mab-acervo .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.mab-acervo .gal-item:hover img{transform:scale(1.06)}
+.mab-acervo .gal-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);padding:.6rem .6rem .4rem;font-size:.7rem;color:var(--fab-muted)}
+.mab-acervo .lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(5,8,14,.88);backdrop-filter:blur(4px)}
+.mab-acervo .lightbox.is-open{display:flex}
+.mab-acervo .lightbox-media{position:relative;max-width:min(95vw,1100px);max-height:88vh}
+.mab-acervo .lightbox-img{display:block;max-width:100%;max-height:88vh;width:auto;height:auto;border-radius:var(--fab-r-md);border:1px solid var(--fab-border);box-shadow:var(--fab-shadow)}
+.mab-acervo .lightbox-close{position:absolute;top:.5rem;right:.5rem;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--fab-r-full);border:1px solid var(--fab-border);background:rgba(11,14,20,.75);color:var(--fab-text);cursor:pointer;transition:background var(--fab-tr),transform var(--fab-tr)}
+.mab-acervo .lightbox-close:hover{background:var(--fab-blue-bg)}
+.mab-acervo .lightbox-close:active{transform:scale(.96)}
+.mab-acervo .sidebar{min-width:0}
+.mab-acervo .scard{background:var(--fab-surface);border:1px solid var(--fab-border);border-radius:var(--fab-r-xl);overflow:hidden;margin-bottom:1rem}
+.mab-acervo .scard-head{padding:.75rem 1.25rem;background:var(--fab-offset);border-bottom:1px solid var(--fab-divider);font-family:var(--fd);font-weight:700;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fab-gold);display:flex;align-items:center;gap:.4rem}
+.mab-acervo .scard-head svg{width:13px;height:13px}
+.mab-acervo .scard-body{padding:.75rem 1.25rem}
+.mab-acervo .pid-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--fab-divider)}
+.mab-acervo .pid-row:last-child{border:none}
+.mab-acervo .pid-l{font-size:.7rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em}
+.mab-acervo .pid-v{font-family:var(--fd);font-weight:600;font-size:.9rem;color:var(--fab-text)}
+.mab-acervo .pid-v.mono{font-family:'Courier New',monospace;font-size:.75rem;color:var(--fab-blue)}
+.mab-acervo .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;padding:.75rem 0}
+.mab-acervo .qr-cap{font-size:.7rem;color:var(--fab-muted);text-align:center;line-height:1.5}
+.mab-acervo .actions{display:flex;flex-direction:column;gap:.5rem}
+.mab-acervo .btn{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.65rem 1rem;border-radius:var(--fab-r-md);font-family:var(--fb);font-size:.875rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:background var(--fab-tr),border-color var(--fab-tr),transform var(--fab-tr)}
+.mab-acervo .btn svg{width:15px;height:15px;flex-shrink:0}
+.mab-acervo .btn:active{transform:scale(.98)}
+.mab-acervo .btn-gold{background:var(--fab-gold);color:#0b0e14;font-weight:700}
+.mab-acervo .btn-gold:hover{background:var(--fab-gold-h)}
+.mab-acervo .btn-blue{background:var(--fab-blue);color:#fff}
+.mab-acervo .btn-blue:hover{background:var(--fab-blue-h)}
+.mab-acervo .btn-ghost{background:transparent;border:1px solid var(--fab-border);color:var(--fab-muted)}
+.mab-acervo .btn-ghost:hover{border-color:var(--fab-blue);color:var(--fab-blue);background:var(--fab-blue-bg)}
+@keyframes mab-fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.mab-fu{opacity:0;animation:mab-fadeup .6s cubic-bezier(.16,1,.3,1) forwards}
+.mab-d1{animation-delay:.1s}.mab-d2{animation-delay:.2s}.mab-d3{animation-delay:.3s}
+</style>
+
+<!-- ③ HTML DO ARTIGO -->
+<div class="mab-acervo">
+
+  <section class="hero">
+    <div class="hero-grid">
+
+      <div class="mab-fu mab-d1">
+        <nav class="bc" aria-label="Caminho">
+          <a href="/index.php/acervo">Acervo</a>
+          <span class="bc-sep">›</span>
+          <span>[[CATEGORIA DO ACERVO]]</span>
+        </nav>
+        <div class="badge-row">
+          <span class="badge badge-era">[[PERÍODO HISTÓRICO, ex: 1968–1990]]</span>
+          <span class="badge badge-cat">[[TIPO/CLASSIFICAÇÃO]]</span>
+          <span class="badge badge-ok">✦ [[STATUS, ex: Em exposição]]</span>
+        </div>
+        <h1 class="piece-title">[[NOME DO OBJETO]]<br>[[DENOMINAÇÃO TÉCNICA]]</h1>
+        <p class="piece-sub">
+          [[DESCRIÇÃO BREVE DO OBJETO: 2-3 linhas explicando o que é, sua importância histórica
+          e relevância para o acervo. Mantenha informativo mas conciso.]]
+        </p>
+        <div class="meta-chips">
+          <div class="mc">
+            <i data-lucide="[[ÍCONE LUCIDE 1, ex: calendar]]" class="mc-icon"></i>
+            <div><span class="mc-l">[[RÓTULO 1]]</span><span class="mc-v">[[VALOR 1]]</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="[[ÍCONE LUCIDE 2, ex: map-pin]]" class="mc-icon"></i>
+            <div><span class="mc-l">[[RÓTULO 2]]</span><span class="mc-v">[[VALOR 2]]</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="[[ÍCONE LUCIDE 3, ex: gauge]]" class="mc-icon"></i>
+            <div><span class="mc-l">[[RÓTULO 3]]</span><span class="mc-v">[[VALOR 3]]<small>[[UNIDADE]]</small></span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="[[ÍCONE LUCIDE 4, ex: move-horizontal]]" class="mc-icon"></i>
+            <div><span class="mc-l">[[RÓTULO 4]]</span><span class="mc-v">[[VALOR 4]]<small>[[UNIDADE]]</small></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODELO 3D INTERATIVO
+           Substitua [[URL_RAW_GLB]] pela URL raw do arquivo .glb no GitHub:
+           FORMATO: https://raw.githubusercontent.com/heglas/DCTA/[HASH]/01.MAB/01.Acervo/[ARQUIVO].glb
+      -->
+      <div class="model-wrap mab-fu mab-d2">
+
+        <model-viewer
+          src="[[URL_RAW_GLB]]"
+          alt="[[DESCRIÇÃO ALT DO MODELO 3D]]"
+          auto-rotate
+          auto-rotate-delay="1000"
+          rotation-per-second="30deg"
+          camera-controls
+          touch-action="pan-y"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          ar-scale="fixed"
+          shadow-intensity="1.2"
+          shadow-softness="0.8"
+          exposure="1.1"
+          environment-image="neutral"
+          loading="eager"
+          reveal="auto">
+          <!-- Barra de progresso de carregamento -->
+          <div slot="progress-bar" style="
+            position:absolute;bottom:0;left:0;right:0;height:3px;
+            background:var(--fab-divider);border-radius:0 0 var(--fab-r-xl) var(--fab-r-xl);overflow:hidden">
+            <div id="mab-progress" style="height:100%;width:0%;background:var(--fab-gold);transition:width .3s ease"></div>
+          </div>
+          <!-- Mensagem se WebGL não disponível -->
+          <div slot="error" style="
+            display:flex;align-items:center;justify-content:center;
+            width:100%;height:100%;flex-direction:column;gap:1rem;
+            color:var(--fab-muted);font-family:var(--fb);font-size:.875rem;text-align:center;padding:2rem">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Não foi possível carregar o modelo 3D.<br>Verifique sua conexão ou tente outro navegador.</p>
+          </div>
+        </model-viewer>
+
+        <div class="model-badge"><span class="mdot"></span> Modelo 3D Interativo</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="body-grid">
+    <article>
+
+      <!-- SEÇÃO 1: HISTÓRIA/CONTEXTO -->
+      <div class="sec mab-fu mab-d1">
+        <div class="sec-label">
+          <span class="sec-label-txt">História</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Contexto Histórico</h2>
+        <p>[[PARÁGRAFO 1: Descreva as origens, desenvolvimento e importância histórica do objeto.
+          Use <strong>texto em negrito</strong> para destacar nomes, datas ou conceitos-chave.]]</p>
+        <p>[[PARÁGRAFO 2: Continue a narrativa histórica, incluindo eventos principais, impacto,
+          e qualquer informação relevante sobre sua operação ou uso.]]</p>
+      </div>
+
+      <!-- SEÇÃO 2: CRONOLOGIA -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Cronologia</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Linha do Tempo</h2>
+        <div class="tl" role="list">
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">[[ANO/PERÍODO 1]]</div>
+            <div class="tl-desc">[[DESCRIÇÃO DO EVENTO 1 (máx. 1 linha)]]</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">[[ANO/PERÍODO 2]]</div>
+            <div class="tl-desc">[[DESCRIÇÃO DO EVENTO 2 (máx. 1 linha)]]</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">[[ANO/PERÍODO 3]]</div>
+            <div class="tl-desc">[[DESCRIÇÃO DO EVENTO 3 (máx. 1 linha)]]</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">[[ANO/PERÍODO 4]]</div>
+            <div class="tl-desc">[[DESCRIÇÃO DO EVENTO 4 (máx. 1 linha)]]</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">[[ANO/PERÍODO 5]]</div>
+            <div class="tl-desc">[[DESCRIÇÃO DO EVENTO 5 (máx. 1 linha)]]</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: ESPECIFICAÇÕES TÉCNICAS -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Ficha Técnica</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Especificações Técnicas</h2>
+        <div class="specs" role="table" aria-label="Especificações técnicas">
+          <!-- Customize os campos abaixo conforme necessário. Mantenha 10 specs (2 colunas x 5 linhas) -->
+          <div class="spec"><div class="spec-l">[[LABEL 1]]</div><div class="spec-v">[[VALOR 1]]<small>[[UNIDADE 1]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 2]]</div><div class="spec-v">[[VALOR 2]]<small>[[UNIDADE 2]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 3]]</div><div class="spec-v">[[VALOR 3]]<small>[[UNIDADE 3]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 4]]</div><div class="spec-v">[[VALOR 4]]<small>[[UNIDADE 4]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 5]]</div><div class="spec-v">[[VALOR 5]]<small>[[UNIDADE 5]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 6]]</div><div class="spec-v">[[VALOR 6]]<small>[[UNIDADE 6]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 7]]</div><div class="spec-v">[[VALOR 7]]<small>[[UNIDADE 7]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 8]]</div><div class="spec-v">[[VALOR 8]]<small>[[UNIDADE 8]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 9]]</div><div class="spec-v">[[VALOR 9]]<small>[[UNIDADE 9]]</small></div></div>
+          <div class="spec"><div class="spec-l">[[LABEL 10]]</div><div class="spec-v">[[VALOR 10]]<small>[[UNIDADE 10]]</small></div></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 4: GALERIA -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Galeria</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Registros Fotográficos</h2>
+        <div class="gallery">
+          <div class="gal-item" role="button" tabindex="0" aria-label="Ampliar foto: [[DESCRIÇÃO FOTO 1]]">
+            <img src="[[URL_FOTO_1]]" alt="[[DESCRIÇÃO FOTO 1]]" width="400" height="300" loading="lazy">
+          </div>
+          <div class="gal-item" role="button" tabindex="0" aria-label="Ampliar foto: [[DESCRIÇÃO FOTO 2]]">
+            <img src="[[URL_FOTO_2]]" alt="[[DESCRIÇÃO FOTO 2]]" width="400" height="300" loading="lazy">
+          </div>
+          <div class="gal-item" role="button" tabindex="0" aria-label="Ampliar foto: [[DESCRIÇÃO FOTO 3]]">
+            <img src="[[URL_FOTO_3]]" alt="[[DESCRIÇÃO FOTO 3]]" width="400" height="300" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- SIDEBAR: INFORMAÇÕES DO ACERVO -->
+    <aside class="sidebar" aria-label="Registro do acervo">
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="database"></i> Registro de Acervo</div>
+        <div class="scard-body">
+          <div class="pid-row"><span class="pid-l">[[LABEL IDENTIFICADOR]]</span><span class="pid-v mono">[[ID_ACERVO]]</span></div>
+          <div class="pid-row"><span class="pid-l">Categoria</span><span class="pid-v">[[CATEGORIA_ACERVO]]</span></div>
+          <div class="pid-row"><span class="pid-l">Subcategoria</span><span class="pid-v">[[SUBCATEGORIA_ACERVO]]</span></div>
+          <div class="pid-row"><span class="pid-l">Conservação</span><span class="pid-v" style="color:var(--fab-green)">[[ESTADO_CONSERVAÇÃO]]</span></div>
+          <div class="pid-row"><span class="pid-l">Localização</span><span class="pid-v">[[LOCAL_ACERVO]]</span></div>
+          <div class="pid-row"><span class="pid-l">[[LABEL DATA]]</span><span class="pid-v">[[DATA_ACERVO]]</span></div>
+        </div>
+      </div>
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="qr-code"></i> Acesso Rápido</div>
+        <div class="scard-body">
+          <div class="qr-wrap">
+            <!-- SUBSTITUA ESTE SVG COM O QR CODE REAL OU USE FERRAMENTA ONLINE: https://qr-code-generator.com/ -->
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" aria-label="QR Code desta página">
+              <rect width="110" height="110" rx="6" fill="#111520"/>
+              <rect x="6" y="6" width="34" height="34" rx="3" fill="#c8a84b" fill-opacity=".12" stroke="#c8a84b" stroke-width="1.5"/>
+              <rect x="12" y="12" width="22" height="22" rx="2" fill="#c8a84b" fill-opacity=".25"/>
+              <rect x="17" y="17" width="12" height="12" fill="#c8a84b"/>
+              <rect x="70" y="6" width="34" height="34" rx="3" fill="#c8a84b" fill-opacity=".12" stroke="#c8a84b" stroke-width="1.5"/>
+              <rect x="76" y="12" width="22" height="22" rx="2" fill="#c8a84b" fill-opacity=".25"/>
+              <rect x="81" y="17" width="12" height="12" fill="#c8a84b"/>
+              <rect x="6" y="70" width="34" height="34" rx="3" fill="#c8a84b" fill-opacity=".12" stroke="#c8a84b" stroke-width="1.5"/>
+              <rect x="12" y="76" width="22" height="22" rx="2" fill="#c8a84b" fill-opacity=".25"/>
+              <rect x="17" y="81" width="12" height="12" fill="#c8a84b"/>
+              <rect x="46" y="8" width="6" height="6" fill="#c8a84b" fill-opacity=".5"/>
+              <rect x="54" y="8" width="6" height="6" fill="#c8a84b" fill-opacity=".7"/>
+              <rect x="50" y="16" width="6" height="6" fill="#c8a84b" fill-opacity=".4"/>
+              <rect x="48" y="46" width="6" height="6" fill="#c8a84b" fill-opacity=".5"/>
+              <rect x="56" y="50" width="6" height="6" fill="#1a73c5" fill-opacity=".6"/>
+              <rect x="48" y="56" width="4" height="4" fill="#c8a84b" fill-opacity=".7"/>
+              <rect x="64" y="48" width="6" height="6" fill="#1a73c5" fill-opacity=".5"/>
+              <rect x="72" y="52" width="4" height="4" fill="#c8a84b" fill-opacity=".4"/>
+              <rect x="48" y="70" width="6" height="6" fill="#1a73c5" fill-opacity=".6"/>
+              <rect x="56" y="74" width="6" height="6" fill="#c8a84b" fill-opacity=".4"/>
+              <rect x="64" y="70" width="4" height="4" fill="#1a73c5" fill-opacity=".5"/>
+              <rect x="72" y="76" width="6" height="6" fill="#c8a84b" fill-opacity=".7"/>
+              <rect x="84" y="80" width="6" height="6" fill="#c8a84b" fill-opacity=".5"/>
+              <rect x="96" y="70" width="8" height="4" fill="#1a73c5" fill-opacity=".4"/>
+            </svg>
+            <p class="qr-cap">Aponte a câmera do celular<br>para acessar este registro</p>
+          </div>
+        </div>
+      </div>
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="share-2"></i> Ações</div>
+        <div class="scard-body">
+          <div class="actions">
+            <a href="#" class="btn btn-gold"><i data-lucide="box"></i> Visualizar em AR</a>
+            <a href="#" class="btn btn-blue"><i data-lucide="download"></i> Ficha Técnica (PDF)</a>
+            <a href="#" class="btn btn-ghost"><i data-lucide="share-2"></i> Compartilhar</a>
+            <a href="#" class="btn btn-ghost"><i data-lucide="flag"></i> Sugerir correção</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- LIGHTBOX PARA GALERIA -->
+  <div class="lightbox" id="mab-lightbox" aria-hidden="true">
+    <div class="lightbox-media" role="dialog" aria-modal="true" aria-label="Visualização ampliada da foto">
+      <button class="lightbox-close" id="mab-lightbox-close" type="button" aria-label="Fechar visualização">
+        <i data-lucide="x"></i>
+      </button>
+      <img class="lightbox-img" id="mab-lightbox-img" src="" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- ④ SCRIPTS -->
+<script>
+(function(){
+  function init(){
+    if(typeof lucide === 'undefined') return setTimeout(init, 120);
+    lucide.createIcons({attrs:{width:14,height:14}});
+
+    /* Barra de progresso do model-viewer */
+    var mv = document.querySelector('.mab-acervo model-viewer');
+    var bar = document.getElementById('mab-progress');
+    if(mv && bar){
+      mv.addEventListener('progress', function(e){
+        bar.style.width = (e.detail.totalProgress * 100) + '%';
+      });
+      mv.addEventListener('load', function(){
+        bar.style.width = '100%';
+        setTimeout(function(){ bar.style.opacity = '0'; }, 600);
+      });
+      mv.addEventListener('error', function(e){
+        console.error('[MAB model-viewer] Erro ao carregar GLB:', e);
+      });
+    }
+    initGalleryLightbox();
+    initScrollAnim();
+  }
+  init();
+
+  function initGalleryLightbox(){
+    var lightbox = document.getElementById('mab-lightbox');
+    var lightboxImg = document.getElementById('mab-lightbox-img');
+    var closeBtn = document.getElementById('mab-lightbox-close');
+    if(!lightbox || !lightboxImg || !closeBtn) return;
+
+    var open = function(item){
+      var img = item.querySelector('img');
+      if(!img) return;
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt || 'Imagem ampliada';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    var close = function(){
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = '';
+      document.body.style.overflow = '';
+    };
+
+    document.querySelectorAll('.mab-acervo .gal-item').forEach(function(item){
+      item.addEventListener('click', function(){ open(item); });
+      item.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          open(item);
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    lightbox.addEventListener('click', function(e){
+      if(e.target === lightbox) close();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && lightbox.classList.contains('is-open')) close();
+    });
+  }
+
+  function initScrollAnim(){
+    if(!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.style.animationPlayState = 'running';
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:.1});
+    document.querySelectorAll('.mab-acervo .mab-fu').forEach(function(el){
+      el.style.animationPlayState = 'paused';
+      obs.observe(el);
+    });
+  }
+})();
+</script>

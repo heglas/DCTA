@@ -1,0 +1,570 @@
+<!-- ============================================================
+     MAB — CATÁLOGO DE ACERVO | Artigo Joomla — TABELA RESPONSIVA
+     
+     Página de catálogo com tabela de items de acervo por seção.
+     Tema: Dark mode com cores ouro (#c8a84b), azul (#1a73c5), vermelho (#e53935)
+     Responsivo: Funciona em mobile, tablet e desktop
+     Uso: Inserir em <iframe> no Joomla
+============================================================ -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAB — Catálogo de Acervo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <style>
+    /* Estilos escopados APENAS dentro de .mab-catalog para não quebrar o Joomla */
+    
+    .mab-catalog * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --fab-bg: #0b0e14;
+      --fab-surface: #111520;
+      --fab-offset: #1c2035;
+      --fab-divider: #2a2f4a;
+      --fab-border: #363c5c;
+      --fab-text: #e8eaf0;
+      --fab-muted: #8b92b0;
+      --fab-faint: #4a5070;
+      --fab-blue: #1a73c5;
+      --fab-blue-h: #1560a8;
+      --fab-blue-bg: #0f1e35;
+      --fab-gold: #c8a84b;
+      --fab-gold-h: #b8952e;
+      --fab-gold-bg: #251e0a;
+      --fab-green: #4caf50;
+      --fab-red: #e53935;
+      --fab-red-h: #c62828;
+      --fab-red-bg: #1a0a0a;
+      --fab-r-sm: 0.25rem;
+      --fab-r-md: 0.5rem;
+      --fab-r-lg: 0.75rem;
+      --fab-r-xl: 1rem;
+      --fab-tr: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --fd: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+      --fb: 'Barlow', 'Helvetica Neue', sans-serif;
+    }
+
+    .mab-catalog {
+      font-family: var(--fb);
+      font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+      color: var(--fab-text);
+      background: var(--fab-bg);
+      line-height: 1.65;
+      min-height: auto;
+      padding: 1.5rem;
+    }
+
+    /* Header */
+    .catalog-header {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--fab-divider);
+    }
+
+    .catalog-title {
+      font-family: var(--fd);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: var(--fab-text);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .catalog-subtitle {
+      font-size: clamp(0.9rem, 0.85rem + 0.15vw, 1rem);
+      color: var(--fab-muted);
+    }
+
+    /* Filtros */
+    .catalog-filters {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-family: var(--fd);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--fab-gold);
+      white-space: nowrap;
+    }
+
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: var(--fab-offset);
+      border: 1px solid var(--fab-border);
+      border-radius: var(--fab-r-lg);
+      color: var(--fab-muted);
+      font-family: var(--fb);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--fab-tr);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--fab-gold);
+      color: var(--fab-gold);
+      background: var(--fab-gold-bg);
+    }
+
+    .filter-btn.active {
+      background: var(--fab-gold);
+      color: var(--fab-bg);
+      border-color: var(--fab-gold);
+      font-weight: 700;
+    }
+
+    /* Tabela Container */
+    .table-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--fab-surface);
+      border: 1px solid var(--fab-divider);
+      border-radius: var(--fab-r-xl);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Tabela Responsiva */
+    .mab-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem);
+    }
+
+    .mab-table thead {
+      background: var(--fab-offset);
+      border-bottom: 1px solid var(--fab-divider);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .mab-table thead th {
+      font-family: var(--fd);
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 1rem 1.2rem;
+      text-align: left;
+      color: var(--fab-gold);
+      border-right: 1px solid var(--fab-divider);
+    }
+
+    .mab-table thead th:last-child {
+      border-right: none;
+    }
+
+    .mab-table tbody tr {
+      border-bottom: 1px solid var(--fab-divider);
+      transition: background var(--fab-tr);
+    }
+
+    .mab-table tbody tr:hover {
+      background: var(--fab-offset);
+    }
+
+    .mab-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .mab-table td {
+      padding: 1rem 1.2rem;
+      color: var(--fab-muted);
+      border-right: 1px solid var(--fab-divider);
+    }
+
+    .mab-table td:last-child {
+      border-right: none;
+    }
+
+    /* Cell Styles */
+    .cell-id {
+      font-family: 'Courier New', monospace;
+      color: var(--fab-blue);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .cell-nome {
+      color: var(--fab-text);
+      font-weight: 600;
+      max-width: 200px;
+    }
+
+    .cell-periodo {
+      font-size: 0.8rem;
+      color: var(--fab-faint);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-family: var(--fd);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.6rem;
+      border-radius: var(--fab-r-sm);
+      border: 1px solid;
+      white-space: nowrap;
+    }
+
+    .badge-a {
+      color: var(--fab-blue);
+      border-color: var(--fab-blue);
+      background: var(--fab-blue-bg);
+    }
+
+    .badge-d {
+      color: var(--fab-red);
+      border-color: var(--fab-red);
+      background: var(--fab-red-bg);
+    }
+
+    .badge-status-ativo {
+      color: var(--fab-green);
+      border-color: #2e7d32;
+      background: rgba(76, 175, 80, 0.12);
+    }
+
+    .badge-status-inativo {
+      color: var(--fab-muted);
+      border-color: var(--fab-faint);
+      background: var(--fab-offset);
+    }
+
+    /* Link Button */
+    .cell-link {
+      text-align: center;
+    }
+
+    .btn-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      background: var(--fab-blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--fab-r-md);
+      font-family: var(--fb);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--fab-tr), transform var(--fab-tr);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-link:hover {
+      background: var(--fab-blue-h);
+      transform: translateY(-2px);
+    }
+
+    .btn-link:active {
+      transform: scale(0.98);
+    }
+
+    .btn-link svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Responsividade: Mobile */
+    @media (max-width: 768px) {
+      .mab-catalog {
+        padding: 1rem;
+      }
+
+      .catalog-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+      }
+
+      .catalog-filters {
+        margin-bottom: 1.5rem;
+      }
+
+      .filter-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+      }
+
+      .mab-table {
+        font-size: 0.75rem;
+      }
+
+      .mab-table thead th,
+      .mab-table td {
+        padding: 0.7rem 0.8rem;
+      }
+
+      .cell-nome {
+        max-width: 120px;
+      }
+
+      .col-periodo {
+        display: none;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .mab-table thead th,
+      .mab-table td {
+        padding: 0.6rem;
+        font-size: 0.7rem;
+      }
+
+      .cell-nome {
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .col-categoria {
+        display: none;
+      }
+
+      .btn-link {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.65rem;
+      }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--fab-muted);
+    }
+
+    .empty-state-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--fab-faint);
+      margin: 0 auto 1rem;
+    }
+
+    .empty-state-text {
+      font-size: 0.95rem;
+    }
+
+    /* Stats */
+    .catalog-stats {
+      max-width: 1200px;
+      margin: 1.5rem auto 0;
+      font-size: 0.8rem;
+      color: var(--fab-muted);
+      text-align: right;
+    }
+
+    .stats-item {
+      display: inline-block;
+      margin-left: 1rem;
+    }
+
+    .stats-label {
+      color: var(--fab-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stats-value {
+      color: var(--fab-gold);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="mab-catalog">
+    <!-- HEADER -->
+    <div class="catalog-header">
+      <h1 class="catalog-title">Catálogo de Acervo</h1>
+      <p class="catalog-subtitle">Consulte todos os itens do acervo do Museu Aeroespacial Brasileiro por categoria</p>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="catalog-filters">
+      <span class="filter-label">Filtrar por seção:</span>
+      <button class="filter-btn" data-filter="*">
+        <i data-lucide="list"></i> Todos
+      </button>
+      <button class="filter-btn active" data-filter="A">
+        <i data-lucide="plane"></i> Aeronáutica (A)
+      </button>
+      <button class="filter-btn" data-filter="D">
+        <i data-lucide="target"></i> Defesa (D)
+      </button>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-container">
+      <table class="mab-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th class="col-categoria">Categoria</th>
+            <th class="col-periodo">Período</th>
+            <th>Status</th>
+            <th>Acesso</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- Preenchido por JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- STATS -->
+    <div class="catalog-stats">
+      <span class="stats-item">
+        <span class="stats-label">Total de items:</span>
+        <span class="stats-value" id="stats-total">0</span>
+      </span>
+      <span class="stats-item">
+        <span class="stats-label">Exibidos:</span>
+        <span class="stats-value" id="stats-exibidos">0</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Base de dados de acervo (apenas items já inseridos)
+    const acervoData = [
+      {
+        id: 'MAB_A_001_EMB01',
+        nome: 'Embraer EMB-110 Bandeirante',
+        secao: 'A',
+        categoria: 'Aeronave de Transporte',
+        periodo: '1968–1990',
+        status: 'Em exposição',
+        ativo: true,
+        link: '/index.php/acervo/embraer-emb-110'
+      },
+      {
+        id: 'MAB_D_001_SMA1',
+        nome: 'Míssil MSA-1',
+        secao: 'D',
+        categoria: 'Míssil Solo-Ar',
+        periodo: '1985–1994',
+        status: 'Projeto Encerrado',
+        ativo: false,
+        link: '/index.php/acervo/missil-msa-1'
+      }
+    ];
+
+    // Filtro inicial: 'A' = Aeronáutica, '*' = Todos
+    let filtroAtual = 'A';
+
+    // Inicializar
+    function init() {
+      if(typeof lucide === 'undefined') return setTimeout(init, 100);
+      lucide.createIcons({attrs:{width:14,height:14}});
+      renderTabela();
+      setupFiltros();
+    }
+
+    // Render Tabela
+    function renderTabela() {
+      const tableBody = document.getElementById('table-body');
+      const dados = filtroAtual === '*' 
+        ? acervoData 
+        : acervoData.filter(item => item.secao === filtroAtual);
+
+      if(dados.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 2rem;">
+              <div class="empty-state">
+                <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <p class="empty-state-text">Nenhum item encontrado para esta seção</p>
+              </div>
+            </td>
+          </tr>
+        `;
+      } else {
+        tableBody.innerHTML = dados.map(item => `
+          <tr>
+            <td><span class="cell-id">${item.id}</span></td>
+            <td><span class="cell-nome">${item.nome}</span></td>
+            <td class="col-categoria">
+              <span class="badge ${item.secao === 'A' ? 'badge-a' : 'badge-d'}">
+                ${item.secao === 'A' ? '✈ Aero' : '🎯 Defesa'}
+              </span>
+            </td>
+            <td class="col-periodo"><span class="cell-periodo">${item.periodo}</span></td>
+            <td>
+              <span class="badge ${item.ativo ? 'badge-status-ativo' : 'badge-status-inativo'}">
+                ${item.status}
+              </span>
+            </td>
+            <td class="cell-link">
+              <a href="${item.link}" class="btn-link" title="Ver detalhes">
+                <i data-lucide="external-link"></i>
+                <span>Ver</span>
+              </a>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Atualizar stats
+      document.getElementById('stats-total').textContent = acervoData.length;
+      document.getElementById('stats-exibidos').textContent = dados.length;
+      
+      // Re-renderizar ícones
+      if(typeof lucide !== 'undefined') {
+        lucide.createIcons({attrs:{width:14,height:14}});
+      }
+    }
+
+    // Setup Filtros
+    function setupFiltros() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          filtroAtual = this.dataset.filter;
+          renderTabela();
+        });
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
