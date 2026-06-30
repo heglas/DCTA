@@ -1,0 +1,404 @@
+<!-- ============================================================
+     MAB — ACERVO DIGITAL | Artigo Joomla — SONDA IV (Sistema de Injeção Secundária)
+     ID: MAB_E_001_SONDAIV
+     Gerado: Junho/2026
+============================================================ -->
+
+<!-- ① FONTES E LIBS EXTERNAS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- ② ESTILOS ESCOPADOS -->
+<style>
+.mab-acervo *,.mab-acervo *::before,.mab-acervo *::after{box-sizing:border-box}
+.mab-acervo {
+  --fab-bg:#0b0e14;--fab-surface:#111520;--fab-s2:#16192a;
+  --fab-offset:#1c2035;--fab-dynamic:#242843;--fab-divider:#2a2f4a;
+  --fab-border:#363c5c;--fab-text:#e8eaf0;--fab-muted:#8b92b0;
+  --fab-faint:#4a5070;--fab-blue:#1a73c5;--fab-blue-h:#1560a8;
+  --fab-blue-bg:#0f1e35;--fab-gold:#c8a84b;--fab-gold-h:#b8952e;
+  --fab-gold-bg:#251e0a;--fab-green:#4caf50;--fab-purple:#9c27b0;--fab-purple-h:#7b1fa2;
+  --fab-purple-bg:#240e47;
+  --fab-red:#e53935;--fab-red-h:#c62828;--fab-red-bg:#1a0a0a;
+  --fab-r-sm:.25rem;--fab-r-md:.5rem;--fab-r-lg:.75rem;
+  --fab-r-xl:1rem;--fab-r-full:9999px;
+  --fab-shadow:0 4px 20px rgba(0,0,0,.5);
+  --fab-tr:180ms cubic-bezier(.16,1,.3,1);
+  --fd:'Barlow Condensed','Arial Narrow',sans-serif;
+  --fb:'Barlow','Helvetica Neue',sans-serif;
+  font-family:var(--fb);
+  font-size:clamp(1rem,.95rem + .25vw,1.125rem);
+  color:var(--fab-text);background:var(--fab-bg);
+  border-radius:var(--fab-r-xl);overflow:hidden;line-height:1.65;
+}
+.mab-acervo .hero{position:relative;overflow:hidden;background:var(--fab-surface);border-bottom:1px solid var(--fab-divider)}
+.mab-acervo .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(to right,var(--fab-divider) 1px,transparent 1px),linear-gradient(to bottom,var(--fab-divider) 1px,transparent 1px);background-size:48px 48px;opacity:.18;pointer-events:none;z-index:0}
+.mab-acervo .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,var(--fab-bg));pointer-events:none;z-index:1}
+.mab-acervo .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center;padding:3rem 2rem 2rem;max-width:1100px;margin:0 auto}
+@media(max-width:860px){.mab-acervo .hero-grid{grid-template-columns:1fr;padding:2rem 1rem 1.5rem}}
+.mab-acervo .bc{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--fab-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem}
+.mab-acervo .bc a{color:var(--fab-muted);text-decoration:none;transition:color var(--fab-tr)}
+.mab-acervo .bc a:hover{color:var(--fab-gold)}
+.mab-acervo .bc-sep{color:var(--fab-faint)}
+.mab-acervo .badge-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.mab-acervo .badge{font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .7rem;border-radius:var(--fab-r-sm);border:1px solid}
+.mab-acervo .badge-era{color:var(--fab-gold);border-color:var(--fab-gold);background:var(--fab-gold-bg)}
+.mab-acervo .badge-cat{color:var(--fab-purple);border-color:var(--fab-purple);background:var(--fab-purple-bg)}
+.mab-acervo .badge-red{color:var(--fab-red);border-color:var(--fab-red);background:var(--fab-red-bg)}
+.mab-acervo .badge-ok{color:var(--fab-green);border-color:#2e7d32;background:rgba(46,125,50,.12)}
+.mab-acervo .piece-title{font-family:var(--fd);font-weight:800;font-size:clamp(2.2rem,5vw,4.5rem);line-height:1.05;letter-spacing:.01em;color:var(--fab-text);margin-bottom:.75rem}
+.mab-acervo .piece-sub{font-size:clamp(.95rem,1vw,1.05rem);color:var(--fab-muted);margin-bottom:1.5rem;line-height:1.6;max-width:52ch}
+.mab-acervo .meta-chips{display:flex;flex-wrap:wrap;gap:.75rem}
+.mab-acervo .mc{display:flex;align-items:center;gap:.5rem;background:var(--fab-offset);border:1px solid var(--fab-border);border-radius:var(--fab-r-lg);padding:.4rem .75rem}
+.mab-acervo .mc svg{color:var(--fab-purple);width:15px;height:15px;flex-shrink:0}
+.mab-acervo .mc-l{font-size:.65rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em;display:block}
+.mab-acervo .mc-v{font-family:var(--fd);font-weight:700;font-size:.95rem;color:var(--fab-text)}
+.mab-acervo .mc-v small{font-family:var(--fb);font-weight:400;font-size:.8rem;color:var(--fab-muted)}
+.mab-acervo .model-wrap{
+  position:relative;border-radius:var(--fab-r-xl);overflow:hidden;
+  aspect-ratio:4/3;
+  background:radial-gradient(ellipse at center,#2c1c40 0%,#140824 100%);
+  border:1px solid var(--fab-border);
+  box-shadow:var(--fab-shadow),0 0 60px rgba(156,39,176,.15);
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.mab-acervo .model-badge{position:absolute;top:.75rem;right:.75rem;display:flex;align-items:center;gap:.35rem;font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(11,14,20,.8);border:1px solid var(--fab-purple);border-radius:var(--fab-r-full);padding:.2rem .75rem;color:var(--fab-purple);z-index:10;pointer-events:none}
+.mab-acervo .mdot{width:6px;height:6px;border-radius:50%;background:var(--fab-purple);animation:mab-pulse 2s ease-in-out infinite}
+@keyframes mab-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.mab-acervo .body-grid{display:grid;grid-template-columns:1fr 300px;gap:2.5rem;align-items:start;max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+@media(max-width:860px){.mab-acervo .body-grid{grid-template-columns:1fr;padding:1.5rem 1rem}}
+.mab-acervo .sec{margin-bottom:2.5rem}
+.mab-acervo .sec-label{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.mab-acervo .sec-label-line{flex:1;height:1px;background:var(--fab-divider)}
+.mab-acervo .sec-label-txt{font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--fab-purple)}
+.mab-acervo .sec h2{font-family:var(--fd);font-weight:700;font-size:clamp(1.4rem,2vw,2rem);color:var(--fab-text);margin-bottom:1rem;padding-left:1rem;border-left:3px solid var(--fab-purple)}
+.mab-acervo .sec p{font-size:clamp(.95rem,.9rem + .2vw,1.05rem);color:var(--fab-muted);margin-bottom:1rem;line-height:1.75}
+.mab-acervo .sec p strong{color:var(--fab-text);font-weight:600}
+.mab-acervo .tl{position:relative;padding-left:2rem}
+.mab-acervo .tl::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--fab-purple),var(--fab-blue),transparent)}
+.mab-acervo .tl-item{position:relative;margin-bottom:1.5rem}
+.mab-acervo .tl-item::before{content:'';position:absolute;left:-1.7rem;top:5px;width:12px;height:12px;border-radius:50%;background:var(--fab-purple);border:2px solid var(--fab-bg);box-shadow:0 0 8px var(--fab-purple)}
+.mab-acervo .tl-year{font-family:var(--fd);font-weight:700;font-size:.85rem;color:var(--fab-purple);letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .tl-desc{font-size:.9rem;color:var(--fab-muted);line-height:1.6}
+.mab-acervo .specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--fab-divider);border:1px solid var(--fab-divider);border-radius:var(--fab-r-lg);overflow:hidden}
+@media(max-width:500px){.mab-acervo .specs{grid-template-columns:1fr}}
+.mab-acervo .spec{background:var(--fab-surface);padding:.9rem 1.2rem}
+.mab-acervo .spec-l{font-size:.65rem;color:var(--fab-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .spec-v{font-family:var(--fd);font-size:1.2rem;font-weight:700;color:var(--fab-text)}
+.mab-acervo .spec-v small{font-family:var(--fb);font-size:.8rem;color:var(--fab-muted);font-weight:400}
+.mab-acervo .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+@media(max-width:600px){.mab-acervo .gallery{grid-template-columns:1fr 1fr}}
+.mab-acervo .gal-item{aspect-ratio:4/3;border-radius:var(--fab-r-md);overflow:hidden;background:var(--fab-offset);border:1px solid var(--fab-border);position:relative;cursor:pointer}
+.mab-acervo .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.mab-acervo .gal-item:hover img{transform:scale(1.06)}
+.mab-acervo .gal-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);padding:.6rem .6rem .4rem;font-size:.7rem;color:var(--fab-muted)}
+.mab-acervo .lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(5,8,14,.88);backdrop-filter:blur(4px)}
+.mab-acervo .lightbox.is-open{display:flex}
+.mab-acervo .lightbox-media{position:relative;max-width:min(95vw,1100px);max-height:88vh}
+.mab-acervo .lightbox-img{display:block;max-width:100%;max-height:88vh;width:auto;height:auto;border-radius:var(--fab-r-md);border:1px solid var(--fab-border);box-shadow:var(--fab-shadow)}
+.mab-acervo .lightbox-close{position:absolute;top:.5rem;right:.5rem;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--fab-r-full);border:1px solid var(--fab-border);background:rgba(11,14,20,.75);color:var(--fab-text);cursor:pointer;transition:background var(--fab-tr),transform var(--fab-tr)}
+.mab-acervo .lightbox-close:hover{background:var(--fab-purple-bg)}
+.mab-acervo .lightbox-close:active{transform:scale(.96)}
+.mab-acervo .sidebar{min-width:0}
+.mab-acervo .scard{background:var(--fab-surface);border:1px solid var(--fab-border);border-radius:var(--fab-r-xl);overflow:hidden;margin-bottom:1rem}
+.mab-acervo .scard-head{padding:.75rem 1.25rem;background:var(--fab-offset);border-bottom:1px solid var(--fab-divider);font-family:var(--fd);font-weight:700;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fab-purple);display:flex;align-items:center;gap:.4rem}
+.mab-acervo .scard-head svg{width:13px;height:13px}
+.mab-acervo .scard-body{padding:.75rem 1.25rem}
+.mab-acervo .pid-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--fab-divider)}
+.mab-acervo .pid-row:last-child{border:none}
+.mab-acervo .pid-l{font-size:.7rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em}
+.mab-acervo .pid-v{font-family:var(--fd);font-weight:600;font-size:.9rem;color:var(--fab-text)}
+.mab-acervo .pid-v.mono{font-family:'Courier New',monospace;font-size:.75rem;color:var(--fab-purple)}
+.mab-acervo .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;padding:.75rem 0}
+.mab-acervo .qr-cap{font-size:.7rem;color:var(--fab-muted);text-align:center;line-height:1.5}
+.mab-acervo .actions{display:flex;flex-direction:column;gap:.5rem}
+.mab-acervo .btn{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.65rem 1rem;border-radius:var(--fab-r-md);font-family:var(--fb);font-size:.875rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:background var(--fab-tr),border-color var(--fab-tr),transform var(--fab-tr)}
+.mab-acervo .btn svg{width:15px;height:15px;flex-shrink:0}
+.mab-acervo .btn:active{transform:scale(.98)}
+.mab-acervo .btn-purple{background:var(--fab-purple);color:#fff;font-weight:700}
+.mab-acervo .btn-purple:hover{background:var(--fab-purple-h)}
+.mab-acervo .btn-blue{background:var(--fab-blue);color:#fff}
+.mab-acervo .btn-blue:hover{background:var(--fab-blue-h)}
+.mab-acervo .btn-ghost{background:transparent;border:1px solid var(--fab-border);color:var(--fab-muted)}
+.mab-acervo .btn-ghost:hover{border-color:var(--fab-purple);color:var(--fab-purple);background:var(--fab-purple-bg)}
+@keyframes mab-fadeup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.mab-fu{opacity:0;animation:mab-fadeup .6s cubic-bezier(.16,1,.3,1) forwards}
+.mab-d1{animation-delay:.1s}.mab-d2{animation-delay:.2s}.mab-d3{animation-delay:.3s}
+.model-placeholder{text-align:center;color:var(--fab-muted);font-family:var(--fb)}
+.model-icon{width:80px;height:80px;margin-bottom:1rem;opacity:.6}
+</style>
+
+<!-- ③ HTML DO ARTIGO -->
+<div class="mab-acervo">
+
+  <section class="hero">
+    <div class="hero-grid">
+
+      <div class="mab-fu mab-d1">
+        <nav class="bc" aria-label="Caminho">
+          <a href="/index.php/acervo">Acervo</a>
+          <span class="bc-sep">›</span>
+          <span>Programa Espacial</span>
+        </nav>
+        <div class="badge-row">
+          <span class="badge badge-era">Década de 1980</span>
+          <span class="badge badge-red">Propulsão</span>
+          <span class="badge badge-cat">Programa Espacial Brasileiro</span>
+          <span class="badge badge-ok">✦ Em Exposição</span>
+        </div>
+        <h1 class="piece-title">Sistema de Injeção Secundária<br>Sonda IV</h1>
+        <p class="piece-sub">
+          O <strong>Sistema de Injeção Secundária</strong> foi um componente inovador do <strong>veículo Sonda IV</strong>, desenvolvido integralmente pelo <strong>IAE/CTA</strong>. Instalado na tubeira do propulsor do primeiro estágio, utilizava injeção de gás <strong>Freon</strong> no divergente do motor para controlar a atitude da aeronave durante o voo, representando um marco tecnológico do programa espacial brasileiro.
+        </p>
+        <div class="meta-chips">
+          <div class="mc">
+            <i data-lucide="calendar" class="mc-icon"></i>
+            <div><span class="mc-l">Período</span><span class="mc-v">Década de 1980</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="factory" class="mc-icon"></i>
+            <div><span class="mc-l">Desenvolvedor</span><span class="mc-v">IAE / CTA</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="zap" class="mc-icon"></i>
+            <div><span class="mc-l">Propelente</span><span class="mc-v">Freon</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="target" class="mc-icon"></i>
+            <div><span class="mc-l">Função</span><span class="mc-v">Controle de<small> Atitude</small></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ILUSTRAÇÃO DO SISTEMA -->
+      <div class="model-wrap mab-fu mab-d2">
+        <div class="model-placeholder">
+          <svg class="model-icon" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M100 20 L120 80 L100 100 L80 80 Z" stroke-width="3"/>
+            <circle cx="100" cy="120" r="25"/>
+            <path d="M85 145 Q85 170 100 180 Q115 170 115 145" stroke-width="2"/>
+            <path d="M90 130 L95 140" stroke-width="1.5" opacity="0.6"/>
+            <path d="M110 130 L105 140" stroke-width="1.5" opacity="0.6"/>
+            <text x="100" y="200" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--fb)">Sonda IV — Sistema de Controle</text>
+          </svg>
+          <p>Diagrama esquemático do sistema de injeção secundária</p>
+        </div>
+        <div class="model-badge"><span class="mdot"></span> Acervo Histórico</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="body-grid">
+    <article>
+
+      <!-- SEÇÃO 1: HISTÓRIA/CONTEXTO -->
+      <div class="sec mab-fu mab-d1">
+        <div class="sec-label">
+          <span class="sec-label-txt">História</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Contexto Histórico</h2>
+        <p>O <strong>Sonda IV</strong> foi um veículo de sondagem espacial concebido para impulsionar tecnologias de guiagem, controle de atitude e propulsão no âmbito do <strong>programa espacial brasileiro</strong> da década de 1980. O <strong>Sistema de Injeção Secundária</strong>, instalado no primeiro estágio, representou uma solução inovadora para o controle durante o voo por meio da injeção de gás <strong>Freon</strong> no divergente da tubeira do motor.</p>
+        <p>A técnica de injeção secundária de gases permitia alterar o vetor de empuxo sem necessidade de mecanismos móveis adicionais, reduzindo complexidade e massa. O sistema foi validado em <strong>banco de provas</strong> e em voos operacionais, demonstrando a viabilidade do conceito e consolidando conhecimento essencial para etapas posteriores do programa espacial nacional, incluindo o desenvolvimento de foguetes de maior capacidade.</p>
+      </div>
+
+      <!-- SEÇÃO 2: CRONOLOGIA -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Cronologia</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Linha do Tempo</h2>
+        <div class="tl" role="list">
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">Década de 1980</div>
+            <div class="tl-desc">Desenvolvimento do Sonda IV e de sistemas de controle de atitude no IAE, incluindo conceito de injeção secundária de gases Freon.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">Ensaios em Banco de Provas</div>
+            <div class="tl-desc">Validação do efeito lateral da injeção de Freon no divergente do motor, confirmando eficácia do sistema de controle de atitude.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">Voos Operacionais</div>
+            <div class="tl-desc">Integração e operação do Sonda IV com o sistema de injeção secundária em voos do programa, demonstrando viabilidade em condições reais.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">Legado Tecnológico</div>
+            <div class="tl-desc">O Sonda IV passa a ser referência tecnológica para etapas posteriores do programa espacial brasileiro, influenciando novos projetos de veículos lançadores.</div>
+          </div>
+          <div class="tl-item" role="listitem">
+            <div class="tl-year">Atualidade</div>
+            <div class="tl-desc">Exemplar do sistema integra acervo do MAB como documento histórico da engenharia de propulsão e controle nacional.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: ESPECIFICAÇÕES TÉCNICAS -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Ficha Técnica</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Especificações Técnicas</h2>
+        <div class="specs" role="table" aria-label="Especificações técnicas do Sistema de Injeção Secundária">
+          <div class="spec"><div class="spec-l">Denominação</div><div class="spec-v">Sistema de Injeção Secundária<small></small></div></div>
+          <div class="spec"><div class="spec-l">Veículo Hospedeiro</div><div class="spec-v">Sonda IV<small> — Primeiro Estágio</small></div></div>
+          <div class="spec"><div class="spec-l">Função Primária</div><div class="spec-v">Controle de Atitude<small></small></div></div>
+          <div class="spec"><div class="spec-l">Propelente de Controle</div><div class="spec-v">Freon<small> — Gás Refrigerante</small></div></div>
+          <div class="spec"><div class="spec-l">Local de Instalação</div><div class="spec-v">Tubeira do Motor<small> — Divergente</small></div></div>
+          <div class="spec"><div class="spec-l">Princípio de Operação</div><div class="spec-v">Injeção Secundária<small> de Gases</small></div></div>
+          <div class="spec"><div class="spec-l">Validação</div><div class="spec-v">Banco de Provas<small> e Voo</small></div></div>
+          <div class="spec"><div class="spec-l">Origem</div><div class="spec-v">Brasil<small> — IAE / CTA</small></div></div>
+          <div class="spec"><div class="spec-l">Período de Desenvolvimento</div><div class="spec-v">Década de 1980<small></small></div></div>
+          <div class="spec"><div class="spec-l">Estágio do Foguete</div><div class="spec-v">Primeiro Estágio<small> — Propulsão Sólida</small></div></div>
+          <div class="spec"><div class="spec-l">Categoria</div><div class="spec-v">Propulsão<small> e Controle</small></div></div>
+          <div class="spec"><div class="spec-l">Significado Histórico</div><div class="spec-v">Marco da Engenharia<small> de Propulsão Nacional</small></div></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 4: DESCRIÇÃO TÉCNICA DETALHADA -->
+      <div class="sec mab-fu">
+        <div class="sec-label">
+          <span class="sec-label-txt">Tecnologia</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Descrição Técnica Detalhada</h2>
+        <p>O sistema de <strong>injeção secundária de gases</strong> integrado no primeiro estágio do Sonda IV representa uma abordagem inovadora para controle de atitude durante o voo. Ao invés de utilizar mecanismos de <strong>tubeira móvel</strong> (gimbal) ou outros atuadores mecânicos, a técnica injetava <strong>gás Freon</strong> no divergente da tubeira do motor de propulsão sólida.</p>
+        <p>Quando injetado no divergente, o <strong>Freon</strong> interage com o fluxo de gases de escape do motor, alterando a direção do vetor de empuxo e consequentemente a atitude da aeronave. Este sistema oferecia vantagens de <strong>simplicidade construtiva</strong>, <strong>redução de massa estrutural</strong> e <strong>confiabilidade operacional</strong>, qualidades essenciais para programas espaciais em fase de desenvolvimento tecnológico.</p>
+        <p>A validação em <strong>banco de provas</strong> comprovou a eficácia do sistema, confirmando as previsões teóricas sobre o <strong>efeito lateral</strong> da injeção e seu impacto no controle de atitude. Os voos operacionais do Sonda IV consolidaram o conceito como tecnologia viável, servindo como base para estudos subsequentes em engenharia de propulsão e controle de atitude no programa espacial brasileiro.</p>
+      </div>
+
+    </article>
+
+    <!-- SIDEBAR: INFORMAÇÕES DO ACERVO -->
+    <aside class="sidebar" aria-label="Registro do acervo">
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="database"></i> Registro de Acervo</div>
+        <div class="scard-body">
+          <div class="pid-row"><span class="pid-l">Identificador</span><span class="pid-v mono">MAB_E_001_SONDAIV</span></div>
+          <div class="pid-row"><span class="pid-l">Categoria</span><span class="pid-v">Espaço</span></div>
+          <div class="pid-row"><span class="pid-l">Subcategoria</span><span class="pid-v">Propulsão</span></div>
+          <div class="pid-row"><span class="pid-l">Conservação</span><span class="pid-v" style="color:var(--fab-green)">Bom estado</span></div>
+          <div class="pid-row"><span class="pid-l">Localização</span><span class="pid-v">MAB — São José dos Campos</span></div>
+          <div class="pid-row"><span class="pid-l">Incorporação</span><span class="pid-v">2026</span></div>
+        </div>
+      </div>
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="qr-code"></i> Acesso Rápido</div>
+        <div class="scard-body">
+          <div class="qr-wrap">
+            <svg width="110" height="110" viewBox="0 0 110 110" fill="none" aria-label="QR Code desta página">
+              <rect width="110" height="110" rx="6" fill="#111520"/>
+              <rect x="6" y="6" width="34" height="34" rx="3" fill="#9c27b0" fill-opacity=".12" stroke="#9c27b0" stroke-width="1.5"/>
+              <rect x="12" y="12" width="22" height="22" rx="2" fill="#9c27b0" fill-opacity=".25"/>
+              <rect x="17" y="17" width="12" height="12" fill="#9c27b0"/>
+              <rect x="70" y="6" width="34" height="34" rx="3" fill="#9c27b0" fill-opacity=".12" stroke="#9c27b0" stroke-width="1.5"/>
+              <rect x="76" y="12" width="22" height="22" rx="2" fill="#9c27b0" fill-opacity=".25"/>
+              <rect x="81" y="17" width="12" height="12" fill="#9c27b0"/>
+              <rect x="6" y="70" width="34" height="34" rx="3" fill="#9c27b0" fill-opacity=".12" stroke="#9c27b0" stroke-width="1.5"/>
+              <rect x="12" y="76" width="22" height="22" rx="2" fill="#9c27b0" fill-opacity=".25"/>
+              <rect x="17" y="81" width="12" height="12" fill="#9c27b0"/>
+              <rect x="46" y="8" width="6" height="6" fill="#9c27b0" fill-opacity=".5"/>
+              <rect x="54" y="8" width="6" height="6" fill="#9c27b0" fill-opacity=".7"/>
+              <rect x="50" y="16" width="6" height="6" fill="#9c27b0" fill-opacity=".4"/>
+              <rect x="48" y="46" width="6" height="6" fill="#9c27b0" fill-opacity=".5"/>
+              <rect x="56" y="50" width="6" height="6" fill="#1a73c5" fill-opacity=".6"/>
+              <rect x="48" y="56" width="4" height="4" fill="#9c27b0" fill-opacity=".7"/>
+              <rect x="64" y="48" width="6" height="6" fill="#1a73c5" fill-opacity=".5"/>
+              <rect x="72" y="52" width="4" height="4" fill="#9c27b0" fill-opacity=".4"/>
+              <rect x="48" y="70" width="6" height="6" fill="#1a73c5" fill-opacity=".6"/>
+              <rect x="56" y="74" width="6" height="6" fill="#9c27b0" fill-opacity=".4"/>
+              <rect x="64" y="70" width="4" height="4" fill="#1a73c5" fill-opacity=".5"/>
+              <rect x="72" y="76" width="6" height="6" fill="#9c27b0" fill-opacity=".7"/>
+              <rect x="84" y="80" width="6" height="6" fill="#9c27b0" fill-opacity=".5"/>
+              <rect x="96" y="70" width="8" height="4" fill="#1a73c5" fill-opacity=".4"/>
+            </svg>
+            <p class="qr-cap">Aponte a câmera do celular<br>para acessar este registro</p>
+          </div>
+        </div>
+      </div>
+      <div class="scard">
+        <div class="scard-head"><i data-lucide="share-2"></i> Ações</div>
+        <div class="scard-body">
+          <div class="actions">
+            <a href="#" class="btn btn-purple"><i data-lucide="download"></i> Ficha Técnica (PDF)</a>
+            <a href="#" class="btn btn-blue"><i data-lucide="link-2"></i> Mais Informações</a>
+            <a href="#" class="btn btn-ghost"><i data-lucide="share-2"></i> Compartilhar</a>
+            <a href="#" class="btn btn-ghost"><i data-lucide="flag"></i> Sugerir correção</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- LIGHTBOX PARA GALERIA -->
+  <div class="lightbox" id="mab-lightbox" aria-hidden="true">
+    <div class="lightbox-media" role="dialog" aria-modal="true" aria-label="Visualização ampliada da foto">
+      <button class="lightbox-close" id="mab-lightbox-close" type="button" aria-label="Fechar visualização">
+        <i data-lucide="x"></i>
+      </button>
+      <img class="lightbox-img" id="mab-lightbox-img" src="" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- ④ SCRIPTS -->
+<script>
+(function(){
+  function init(){
+    if(typeof lucide === 'undefined') return setTimeout(init, 120);
+    lucide.createIcons({attrs:{width:14,height:14}});
+    initGalleryLightbox();
+    initScrollAnim();
+  }
+  init();
+
+  function initGalleryLightbox(){
+    var lightbox = document.getElementById('mab-lightbox');
+    var lightboxImg = document.getElementById('mab-lightbox-img');
+    var closeBtn = document.getElementById('mab-lightbox-close');
+    if(!lightbox || !lightboxImg || !closeBtn) return;
+    var open = function(item){
+      var img = item.querySelector('img');
+      if(!img) return;
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt || 'Imagem ampliada';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    };
+    var close = function(){
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden','true');
+      lightboxImg.src='';
+      document.body.style.overflow='';
+    };
+    document.querySelectorAll('.mab-acervo .gal-item').forEach(function(item){
+      item.addEventListener('click', function(){ open(item); });
+      item.addEventListener('keydown', function(e){
+        if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(item); }
+      });
+    });
+    closeBtn.addEventListener('click', close);
+    lightbox.addEventListener('click', function(e){ if(e.target===lightbox) close(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&lightbox.classList.contains('is-open')) close(); });
+  }
+
+  function initScrollAnim(){
+    if(!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.style.animationPlayState='running'; obs.unobserve(e.target); }
+      });
+    },{threshold:.1});
+    document.querySelectorAll('.mab-acervo .mab-fu').forEach(function(el){
+      el.style.animationPlayState='paused';
+      obs.observe(el);
+    });
+  }
+})();
+</script>

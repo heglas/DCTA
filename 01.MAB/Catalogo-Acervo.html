@@ -248,6 +248,12 @@
       background: var(--fab-red-bg);
     }
 
+    .badge-e {
+      color: #9c27b0;
+      border-color: #9c27b0;
+      background: rgba(156, 39, 176, 0.12);
+    }
+
     .badge-status-ativo {
       color: var(--fab-green);
       border-color: #2e7d32;
@@ -425,6 +431,9 @@
       <button class="filter-btn" data-filter="D">
         <i data-lucide="target"></i> Defesa (D)
       </button>
+      <button class="filter-btn" data-filter="E">
+        <i data-lucide="rocket"></i> Espaço (E)
+      </button>
     </div>
 
     <!-- TABELA -->
@@ -492,6 +501,26 @@
         status: 'Em exposição',
         ativo: true,
         link: './index.php/ultimas-noticias/252-mab-acervo-digital-bafg-120'
+      },
+      {
+        id: 'MAB_D_003_SBAT70',
+        nome: 'SBAT-70 Foguete Não Guiado',
+        secao: 'D',
+        categoria: 'Armamento Aéreo',
+        periodo: '1970–Atualidade',
+        status: 'Em exposição',
+        ativo: true,
+        link: './index.php/ultimas-noticias/254-mab-acervo-digital-sbat-70'
+      },
+      {
+        id: 'MAB_E_001_SONDAIV',
+        nome: 'Sistema de Injeção Secundária (Sonda IV)',
+        secao: 'E',
+        categoria: 'Propulsão',
+        periodo: '1980–',
+        status: 'Em exposição',
+        ativo: true,
+        link: './index.php/ultimas-noticias/248-mab-acervo-digital-sistema-de-injecao-secundario'
       }
     ];
 
@@ -532,8 +561,8 @@
             <td><span class="cell-id">${item.id}</span></td>
             <td><span class="cell-nome">${item.nome}</span></td>
             <td class="col-categoria">
-              <span class="badge ${item.secao === 'A' ? 'badge-a' : 'badge-d'}">
-                ${item.secao === 'A' ? '✈ Aero' : '🎯 Defesa'}
+              <span class="badge ${item.secao === 'A' ? 'badge-a' : item.secao === 'D' ? 'badge-d' : 'badge-e'}">
+                ${item.secao === 'A' ? '✈ Aero' : item.secao === 'D' ? '🎯 Defesa' : '🚀 Espaço'}
               </span>
             </td>
             <td class="col-periodo"><span class="cell-periodo">${item.periodo}</span></td>
