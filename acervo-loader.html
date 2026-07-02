@@ -89,12 +89,12 @@
           <div class="error-box">
             <h2>⚠️ Identificador não fornecido</h2>
             <p>Use um dos IDs disponíveis como parâmetro de URL:</p>
-            <code>acervo-loader.html?id=S33
-acervo-loader.html?id=BAFG120
-acervo-loader.html?id=SBAT70
-acervo-loader.html?id=SMA1
-acervo-loader.html?id=EMB01
-acervo-loader.html?id=SONDAIV</code>
+            <code>?id=S33
+?id=BAFG120
+?id=SBAT70
+?id=SMA1
+?id=EMB01
+?id=SONDAIV</code>
           </div>
         `;
         return;
@@ -113,47 +113,103 @@ acervo-loader.html?id=SONDAIV</code>
       }
 
       try {
-        const url = `https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/${filename}`;
+        // Tentar múltiplas URLs (raw.githubusercontent.com às vezes bloqueia)
+        const urls = [
+          `https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/${filename}`,
+          `https://cdn.jsdelivr.net/gh/heglas/DCTA@main/01.MAB/${filename}`,
+          `https://ghproxy.com/https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/${filename}`
+        ];
         
-        // Usar fetch para carregar o HTML
-        const response = await fetch(url, { mode: 'no-cors' });
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
+        let html = null;
+        let lastError = null;
+
+        for (const url of urls) {
+          try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+
+            const response = await fetch(url, { 
+              signal: controller.signal,
+              headers: { 'Accept': 'text/html' }
+            });
+            
+            clearTimeout(timeout);
+
+            if (response.ok) {
+              html = await response.text();
+              console.log(`✓ Carregado de: ${url}`);
+              break;
+            }
+          } catch (error) {
+            lastError = error;
+            console.log(`✗ Falhou: ${url} — tentando próxima URL...`);
+          }
         }
-        
-        const html = await response.text();
+
+        if (!html) {
+          throw lastError || new Error('Todas as URLs falharam');
+        }
+
         loaderContainer.style.display = 'none';
         acervoContent.innerHTML = html;
 
-        // Re-carregar lucide icons se disponível
+        // Re-carregar lucide icons
         if (typeof lucide !== 'undefined') {
-          lucide.createIcons();
+          setTimeout(() => {
+            try {
+              lucide.createIcons();
+            } catch (e) {
+              console.warn('Erro ao criar ícones lucide:', e);
+            }
+          }, 100);
+        } else {
+          // Carregar lucide dinamicamente
+          const script = document.createElement('script');
+          script.src = 'https://unpkg.com/lucide@latest/dist/umd/lucide.js';
+          script.onload = function() {
+            if (typeof lucide !== 'undefined') {
+              lucide.createIcons();
+            }
+          };
+          document.head.appendChild(script);
         }
 
-        // Re-inicializar model-viewer se disponível
-        if (typeof ModelViewerElement !== 'undefined') {
-          const modelViewers = acervoContent.querySelectorAll('model-viewer');
-          modelViewers.forEach(mv => {
-            // O modelo-viewer deve se reinicializar automaticamente
-          });
+        // Carregar model-viewer se necessário
+        if (acervoContent.querySelector('model-viewer')) {
+          if (typeof ModelViewerElement === 'undefined') {
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
+            document.head.appendChild(script);
+          }
         }
 
       } catch (error) {
+        console.error('Erro ao carregar acervo:', error);
         loaderContainer.innerHTML = `
           <div class="error-box">
             <h2>❌ Erro ao carregar acervo</h2>
-            <p>Não foi possível carregar o arquivo solicitado.</p>
+            <p>Não foi possível carregar o arquivo solicitado após múltiplas tentativas.</p>
             <code>ID: ${id}
 Arquivo: ${filename}
 Erro: ${error.message}</code>
+            <p style="margin-top: 1rem; font-size: 0.85rem; color: #665;">
+              <strong>Dicas:</strong>
+              1. Verifique sua conexão com a internet
+              2. Tente recarregar a página
+              3. Use um proxy como jsDelivr: cdn.jsdelivr.net/gh/...
+            </p>
           </div>
         `;
-        console.error('Erro ao carregar acervo:', error);
       }
     }
 
     // Iniciar carregamento quando DOM estiver pronto
-    document.addEventListener('DOMContentLoaded', loadAcervo);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadAcervo);
+    } else {
+      loadAcervo();
+    }
   </script>
 </body>
 </html>
