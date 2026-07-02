@@ -27,7 +27,7 @@
     ];
   }
 
-  // Extrair e injetar estilos no HEAD
+  // Extrair e injetar estilos no HEAD com !important para superar estilos Joomla
   function extractAndInjectStyles(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -36,11 +36,22 @@
     const styleTags = doc.querySelectorAll('style');
     
     styleTags.forEach((styleTag, index) => {
+      let cssText = styleTag.textContent;
+      
+      // Adicionar !important a todas as propriedades de estilo para garantir precedência
+      cssText = cssText.replace(/([^}]);/g, (match) => {
+        const char = match[0];
+        if (match.includes('!important')) {
+          return match;
+        }
+        return char + ' !important;';
+      });
+      
       const newStyle = document.createElement('style');
       newStyle.id = `mab-acervo-style-${Date.now()}-${index}`;
-      newStyle.textContent = styleTag.textContent;
+      newStyle.textContent = cssText;
       document.head.appendChild(newStyle);
-      console.log(`✓ Estilo injetado (${index + 1}/${styleTags.length})`);
+      console.log(`✓ Estilo injetado com !important (${index + 1}/${styleTags.length})`);
     });
 
     // Procurar por tags <link> para fontes
@@ -71,6 +82,18 @@
     // Remover tags <link> para fontes (já foram injetadas no HEAD)
     const linkTags = doc.querySelectorAll('link[rel="preconnect"], link[href*="fonts.googleapis"]');
     linkTags.forEach(tag => tag.remove());
+    
+    // Remover tags <script> externas (já foram carregadas)
+    const scriptTags = doc.querySelectorAll('script');
+    scriptTags.forEach(tag => {
+      if (tag.src) tag.remove();
+    });
+    
+    // Extrair apenas o conteúdo de .mab-acervo se existir
+    const mabContainer = doc.querySelector('.mab-acervo');
+    if (mabContainer) {
+      return mabContainer.innerHTML;
+    }
     
     return doc.body.innerHTML;
   }
@@ -118,6 +141,9 @@
       return;
     }
 
+    // Adicionar a classe .mab-acervo ao container ANTES de injetar o conteúdo
+    container.classList.add('mab-acervo');
+    
     container.innerHTML = `
       <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; min-height: 300px;">
         <div style="width: 40px; height: 40px; border: 4px solid #ddd; border-top-color: #1a73c5; border-radius: 50%; animation: mab-spin 1s linear infinite;"></div>
@@ -172,24 +198,20 @@
       // PASSO 3: Sanitizar HTML
       html = sanitizeHTML(html);
 
-      // PASSO 4: Injetar no container
+      // PASSO 4: Injetar no container com classe .mab-acervo
       container.innerHTML = html;
       console.log('✓ HTML injetado no container');
-
+      
+      // Forçar repaint para aplicar estilos
+      void container.offsetHeight;
+      
       // PASSO 5: Forçar aplicação de estilos
       setTimeout(() => {
-        if (document.styleSheets) {
-          for (let i = 0; i < document.styleSheets.length; i++) {
-            try {
-              if (document.styleSheets[i].href && document.styleSheets[i].href.includes('mab-acervo')) {
-                console.log(`✓ Estilo aplicado: ${document.styleSheets[i].href}`);
-              }
-            } catch (e) {
-              // CORS pode bloquear acesso
-            }
-          }
+        const mabElement = container.querySelector('.mab-acervo') || container;
+        if (mabElement.style) {
+          console.log('✓ Container .mab-acervo identificado');
         }
-      }, 100);
+      }, 50);
 
       // PASSO 6: Carregar Lucide
       setTimeout(() => {
@@ -217,8 +239,6 @@
         document.head.appendChild(script);
         console.log('✓ model-viewer script carregado');
       }
-
-      console.log(`✅ Acervo "${id}" carregado com estilos!`);
 
     } catch (error) {
       console.error('Erro ao carregar acervo:', error);
