@@ -1,5 +1,5 @@
 /**
- * MAB Acervo Loader — Versão com Preservação de Estilos
+ * MAB Acervo Loader — Versão com Shadow DOM (Isolamento Total de Estilos)
  * 
  * Uso em Joomla:
  * <div data-mab-acervo="S33"></div>
@@ -27,47 +27,18 @@
     ];
   }
 
-  // Extrair e injetar estilos no HEAD com !important para superar estilos Joomla
-  function extractAndInjectStyles(htmlContent) {
+  // Extrair estilos do HTML
+  function extractStyles(htmlContent) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
-    
-    // Procurar por tags <style>
     const styleTags = doc.querySelectorAll('style');
     
-    styleTags.forEach((styleTag, index) => {
-      let cssText = styleTag.textContent;
-      
-      // Adicionar !important a todas as propriedades de estilo para garantir precedência
-      cssText = cssText.replace(/([^}]);/g, (match) => {
-        const char = match[0];
-        if (match.includes('!important')) {
-          return match;
-        }
-        return char + ' !important;';
-      });
-      
-      const newStyle = document.createElement('style');
-      newStyle.id = `mab-acervo-style-${Date.now()}-${index}`;
-      newStyle.textContent = cssText;
-      document.head.appendChild(newStyle);
-      console.log(`✓ Estilo injetado com !important (${index + 1}/${styleTags.length})`);
+    let allCss = '';
+    styleTags.forEach((styleTag) => {
+      allCss += styleTag.textContent + '\n';
     });
-
-    // Procurar por tags <link> para fontes
-    const linkTags = doc.querySelectorAll('link[rel="preconnect"], link[href*="fonts.googleapis"]');
-    linkTags.forEach(linkTag => {
-      if (!document.querySelector(`link[href="${linkTag.href}"]`)) {
-        const newLink = document.createElement('link');
-        newLink.rel = linkTag.rel;
-        newLink.href = linkTag.href;
-        if (linkTag.crossOrigin) newLink.crossOrigin = linkTag.crossOrigin;
-        document.head.appendChild(newLink);
-        console.log(`✓ Google Fonts link injetado`);
-      }
-    });
-
-    return styleTags.length;
+    
+    return allCss;
   }
 
   // Remover tags de estilo do HTML
@@ -79,11 +50,11 @@
     const styleTags = doc.querySelectorAll('style');
     styleTags.forEach(tag => tag.remove());
     
-    // Remover tags <link> para fontes (já foram injetadas no HEAD)
+    // Remover tags <link> para fontes
     const linkTags = doc.querySelectorAll('link[rel="preconnect"], link[href*="fonts.googleapis"]');
     linkTags.forEach(tag => tag.remove());
     
-    // Remover tags <script> externas (já foram carregadas)
+    // Remover tags <script> externas
     const scriptTags = doc.querySelectorAll('script');
     scriptTags.forEach(tag => {
       if (tag.src) tag.remove();
@@ -106,10 +77,7 @@
     const scripts = doc.querySelectorAll('script');
     scripts.forEach(script => {
       if (script.src === '') {
-        const content = script.textContent;
-        if (!content.includes('lucide.createIcons') && !content.includes('model-viewer')) {
-          script.remove();
-        }
+        script.remove();
       }
     });
 
@@ -141,9 +109,6 @@
       return;
     }
 
-    // Adicionar a classe .mab-acervo ao container ANTES de injetar o conteúdo
-    container.classList.add('mab-acervo');
-    
     container.innerHTML = `
       <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; min-height: 300px;">
         <div style="width: 40px; height: 40px; border: 4px solid #ddd; border-top-color: #1a73c5; border-radius: 50%; animation: mab-spin 1s linear infinite;"></div>
@@ -187,10 +152,9 @@
         throw lastError || new Error('Todas as URLs falharam');
       }
 
-      // PASSO 1: Extrair e injetar estilos no HEAD
+      // PASSO 1: Extrair estilos CSS
       console.log('🎨 Extraindo estilos CSS...');
-      const styleCount = extractAndInjectStyles(html);
-      console.log(`✓ ${styleCount} bloco(s) de estilo injetado(s)`);
+      const cssText = extractStyles(html);
 
       // PASSO 2: Remover tags de estilo do HTML
       html = removeStyleTagsFromHTML(html);
@@ -198,26 +162,53 @@
       // PASSO 3: Sanitizar HTML
       html = sanitizeHTML(html);
 
-      // PASSO 4: Injetar no container com classe .mab-acervo
-      container.innerHTML = html;
-      console.log('✓ HTML injetado no container');
-      
-      // Forçar repaint para aplicar estilos
-      void container.offsetHeight;
-      
-      // PASSO 5: Forçar aplicação de estilos
-      setTimeout(() => {
-        const mabElement = container.querySelector('.mab-acervo') || container;
-        if (mabElement.style) {
-          console.log('✓ Container .mab-acervo identificado');
-        }
-      }, 50);
+      // PASSO 4: Carregar Google Fonts globalmente (fora do Shadow DOM)
+      const link = document.createElement('link');
+      link.href = 'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap';
+      link.rel = 'stylesheet';
+      if (!document.querySelector(`link[href="${link.href}"]`)) {
+        document.head.appendChild(link);
+      }
 
-      // PASSO 6: Carregar Lucide
+      // PASSO 5: Criar Shadow DOM para isolamento de estilos
+      console.log('🎭 Criando Shadow DOM...');
+      container.innerHTML = ''; // Limpar container
+      
+      let shadowRoot;
+      try {
+        shadowRoot = container.attachShadow({ mode: 'open' });
+        console.log('✓ Shadow DOM criado com sucesso');
+      } catch (e) {
+        console.warn('⚠️ Shadow DOM não suportado, usando fallback');
+        // Fallback: apenas injetar sem isolamento
+        container.innerHTML = html;
+        container.classList.add('mab-acervo');
+        
+        // Criar e injetar estilos no HEAD
+        const styleEl = document.createElement('style');
+        styleEl.textContent = cssText;
+        document.head.appendChild(styleEl);
+        
+        throw new Error('Shadow DOM fallback usado');
+      }
+
+      // PASSO 6: Injetar CSS no Shadow DOM
+      const shadowStyle = document.createElement('style');
+      shadowStyle.textContent = cssText;
+      shadowRoot.appendChild(shadowStyle);
+      console.log('✓ CSS injetado no Shadow DOM');
+
+      // PASSO 7: Injetar HTML no Shadow DOM
+      const shadowContent = document.createElement('div');
+      shadowContent.innerHTML = html;
+      shadowRoot.appendChild(shadowContent);
+      console.log('✓ HTML injetado no Shadow DOM');
+
+      // PASSO 8: Carregar Lucide
       setTimeout(() => {
         if (typeof lucide !== 'undefined' && lucide.createIcons) {
           lucide.createIcons();
-          console.log('✓ Ícones lucide criados');
+          console.log('✓ Ícones lucide criados (global)');
         } else {
           const script = document.createElement('script');
           script.src = 'https://unpkg.com/lucide@latest/dist/umd/lucide.js';
@@ -231,14 +222,16 @@
         }
       }, 150);
 
-      // PASSO 7: Carregar model-viewer se necessário
-      if (container.querySelector('model-viewer') && !window.ModelViewerElement) {
+      // PASSO 9: Carregar model-viewer se necessário
+      if (html.includes('model-viewer') && !window.ModelViewerElement) {
         const script = document.createElement('script');
         script.type = 'module';
         script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
         document.head.appendChild(script);
         console.log('✓ model-viewer script carregado');
       }
+
+      console.log(`✅ Acervo "${id}" carregado com Shadow DOM!`);
 
     } catch (error) {
       console.error('Erro ao carregar acervo:', error);
