@@ -1,19 +1,14 @@
 /**
- * MAB Acervo Loader — Versão com múltiplos proxies
+ * MAB Acervo Loader — Versão com Preservação de Estilos
  * 
  * Uso em Joomla:
  * <div data-mab-acervo="S33"></div>
- * <script src="https://raw.githubusercontent.com/heglas/DCTA/main/acervo-embed-proxy.js"></script>
- * 
- * Ou com proxy local PHP:
- * <div data-mab-acervo="S33"></div>
- * <script src="/acervo-proxy.php?id=S33"></script>
+ * <script async src="https://cdn.jsdelivr.net/gh/heglas/DCTA@main/acervo-embed-proxy.js"></script>
  */
 
 (function() {
   'use strict';
 
-  // Mapeamento de IDs para nomes de arquivo
   const acervoMap = {
     'S33': 'MAB_T_004_S33@ACERVO.html',
     'BAFG120': 'MAB_D_002_BAFG120@ACERVO.html',
@@ -23,27 +18,61 @@
     'SONDAIV': 'MAB_E_001_SONDAIV@ACERVO.html'
   };
 
-  // Lista de CDNs e proxies alternativos (em ordem de preferência)
   function getUrlVariants(filename) {
     return [
-      // CDN jsDelivr (mais rápido e confiável)
       `https://cdn.jsdelivr.net/gh/heglas/DCTA@main/01.MAB/${filename}`,
-      
-      // GitHub raw (oficial, pode bloquear)
       `https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/${filename}`,
-      
-      // Ghproxy (proxy chinês, bom fallback)
       `https://ghproxy.com/https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/${filename}`,
-      
-      // Statically CDN
       `https://cdn.statically.io/gh/heglas/DCTA/main/01.MAB/${filename}`,
-      
-      // Fastly CDN
-      `https://fastly.jsdelivr.net/gh/heglas/DCTA@main/01.MAB/${filename}`,
-      
-      // Espaço alternativo (mattar.me)
-      `https://cdn.jsdelivr.net/npm/dcta-acervo/${filename}`,
     ];
+  }
+
+  // Extrair e injetar estilos no HEAD
+  function extractAndInjectStyles(htmlContent) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    
+    // Procurar por tags <style>
+    const styleTags = doc.querySelectorAll('style');
+    
+    styleTags.forEach((styleTag, index) => {
+      const newStyle = document.createElement('style');
+      newStyle.id = `mab-acervo-style-${Date.now()}-${index}`;
+      newStyle.textContent = styleTag.textContent;
+      document.head.appendChild(newStyle);
+      console.log(`✓ Estilo injetado (${index + 1}/${styleTags.length})`);
+    });
+
+    // Procurar por tags <link> para fontes
+    const linkTags = doc.querySelectorAll('link[rel="preconnect"], link[href*="fonts.googleapis"]');
+    linkTags.forEach(linkTag => {
+      if (!document.querySelector(`link[href="${linkTag.href}"]`)) {
+        const newLink = document.createElement('link');
+        newLink.rel = linkTag.rel;
+        newLink.href = linkTag.href;
+        if (linkTag.crossOrigin) newLink.crossOrigin = linkTag.crossOrigin;
+        document.head.appendChild(newLink);
+        console.log(`✓ Google Fonts link injetado`);
+      }
+    });
+
+    return styleTags.length;
+  }
+
+  // Remover tags de estilo do HTML
+  function removeStyleTagsFromHTML(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // Remover tags <style>
+    const styleTags = doc.querySelectorAll('style');
+    styleTags.forEach(tag => tag.remove());
+    
+    // Remover tags <link> para fontes (já foram injetadas no HEAD)
+    const linkTags = doc.querySelectorAll('link[rel="preconnect"], link[href*="fonts.googleapis"]');
+    linkTags.forEach(tag => tag.remove());
+    
+    return doc.body.innerHTML;
   }
 
   function sanitizeHTML(html) {
@@ -120,12 +149,11 @@
 
           if (response.ok) {
             html = await response.text();
-            console.log(`✓ Carregado de: ${url}`);
+            console.log(`✓ HTML carregado com sucesso`);
             break;
           }
         } catch (error) {
           lastError = error;
-          console.log(`✗ Falhou [${error.name}]: ${url.substring(0, 50)}...`);
         }
       }
 
@@ -133,42 +161,64 @@
         throw lastError || new Error('Todas as URLs falharam');
       }
 
+      // PASSO 1: Extrair e injetar estilos no HEAD
+      console.log('🎨 Extraindo estilos CSS...');
+      const styleCount = extractAndInjectStyles(html);
+      console.log(`✓ ${styleCount} bloco(s) de estilo injetado(s)`);
+
+      // PASSO 2: Remover tags de estilo do HTML
+      html = removeStyleTagsFromHTML(html);
+
+      // PASSO 3: Sanitizar HTML
       html = sanitizeHTML(html);
+
+      // PASSO 4: Injetar no container
       container.innerHTML = html;
+      console.log('✓ HTML injetado no container');
 
-      // Carregar Lucide dinamicamente
-      if (!window.lucide) {
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/lucide@latest/dist/umd/lucide.js';
-        script.onload = function() {
-          if (window.lucide && window.lucide.createIcons) {
-            window.lucide.createIcons();
+      // PASSO 5: Forçar aplicação de estilos
+      setTimeout(() => {
+        if (document.styleSheets) {
+          for (let i = 0; i < document.styleSheets.length; i++) {
+            try {
+              if (document.styleSheets[i].href && document.styleSheets[i].href.includes('mab-acervo')) {
+                console.log(`✓ Estilo aplicado: ${document.styleSheets[i].href}`);
+              }
+            } catch (e) {
+              // CORS pode bloquear acesso
+            }
           }
-        };
-        document.head.appendChild(script);
-      } else {
-        setTimeout(() => {
-          if (window.lucide && window.lucide.createIcons) {
-            window.lucide.createIcons();
-          }
-        }, 100);
-      }
+        }
+      }, 100);
 
-      // Carregar model-viewer se necessário
+      // PASSO 6: Carregar Lucide
+      setTimeout(() => {
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
+          console.log('✓ Ícones lucide criados');
+        } else {
+          const script = document.createElement('script');
+          script.src = 'https://unpkg.com/lucide@latest/dist/umd/lucide.js';
+          script.onload = function() {
+            if (typeof lucide !== 'undefined') {
+              lucide.createIcons();
+              console.log('✓ Lucide carregado');
+            }
+          };
+          document.head.appendChild(script);
+        }
+      }, 150);
+
+      // PASSO 7: Carregar model-viewer se necessário
       if (container.querySelector('model-viewer') && !window.ModelViewerElement) {
         const script = document.createElement('script');
         script.type = 'module';
         script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
         document.head.appendChild(script);
+        console.log('✓ model-viewer script carregado');
       }
 
-      // Carregar fontes do Google
-      if (html.includes('Barlow')) {
-        const link = document.createElement('link');
-        link.href = 'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-      }
+      console.log(`✅ Acervo "${id}" carregado com estilos!`);
 
     } catch (error) {
       console.error('Erro ao carregar acervo:', error);
@@ -191,9 +241,8 @@
           <p style="color: #721c24; font-size: 0.75rem; margin-top: 1rem;">
             <strong>Dicas:</strong><br>
             • Verifique sua conexão com a internet<br>
-            • Recarregue a página<br>
-            • O GitHub pode estar lento (tente em 5 min)<br>
-            • Peça a hospedagem local do arquivo
+            • Recarregue a página (F5)<br>
+            • O GitHub pode estar lento
           </p>
         </div>
       `;
