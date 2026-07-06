@@ -434,10 +434,10 @@
     <!-- FILTROS -->
     <div class="catalog-filters">
       <span class="filter-label">Filtrar por seção:</span>
-      <button class="filter-btn" data-filter="*">
+      <button class="filter-btn active" data-filter="*">
         <i data-lucide="list"></i> Todos
       </button>
-      <button class="filter-btn active" data-filter="A">
+      <button class="filter-btn" data-filter="A">
         <i data-lucide="plane"></i> Aeronáutica (A)
       </button>
       <button class="filter-btn" data-filter="D">
@@ -491,9 +491,9 @@
     // Base de dados de acervo (apenas items já inseridos)
     const acervoData = [
       {
-        id: 'MAB_T_001_DODGEPOLARA',
+        id: 'MAB_P_002_DODGEPOLARA',
         nome: 'Dodge Polara',
-        secao: 'T',
+        secao: 'P',
         categoria: 'Veículo de Pesquisa',
         periodo: '1962–Atualidade',
         status: 'Em exposição',
@@ -501,10 +501,10 @@
         link: './index.php/ultimas-noticias/256-mab-acervo-digital-dodge-polara'
       },
       {
-        id: 'MAB_T_004_S33',
+        id: 'MAB_I_004_S33',
         nome: 'Propulsor S-33',
-        secao: 'T',
-        categoria: 'Motor-Foguete Sólido',
+        secao: 'I',
+        categoria: 'Propulsão Industrial',
         periodo: 'Desenvolvimento',
         status: 'Em ensaio',
         ativo: true,
@@ -559,11 +559,21 @@
         status: 'Em exposição',
         ativo: true,
         link: './index.php/ultimas-noticias/248-mab-acervo-digital-sistema-de-injecao-secundario'
+      },
+      {
+        id: 'MAB_P_001_SunBA',
+        nome: 'SunBA',
+        secao: 'P',
+        categoria: 'Pesquisa aplicada',
+        periodo: 'Pesquisa e Desenvolvimento',
+        status: 'Acervo Digital',
+        ativo: true,
+        link: './index.php/acervo'
       }
     ];
 
-    // Filtro inicial: 'A' = Aeronáutica, '*' = Todos
-    let filtroAtual = 'A';
+    // Filtro inicial: '*' = Todos
+    let filtroAtual = '*';
 
     // Inicializar
     function init() {

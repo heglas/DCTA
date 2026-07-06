@@ -1,0 +1,400 @@
+<!-- 
+     MAB — ACERVO DIGITAL | Artigo Joomla — SunBA
+     ID: MAB_P_001_SunBA
+     Categoria: Pesquisa (P)
+     Gerado: Julho/2026
+-->
+
+<!-- ① FONTES E LIBS EXTERNAS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- Model-viewer library -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+<style>
+.mab-acervo *,.mab-acervo *::before,.mab-acervo *::after{box-sizing:border-box}
+.mab-acervo{
+  --fab-bg:#0b0e14;--fab-surface:#111520;--fab-s2:#16192a;
+  --fab-offset:#1c2035;--fab-dynamic:#242843;--fab-divider:#2a2f4a;
+  --fab-border:#363c5c;--fab-text:#e8eaf0;--fab-muted:#8b92b0;
+  --fab-faint:#4a5070;--fab-blue:#1a73c5;--fab-blue-h:#1560a8;
+  --fab-blue-bg:#0f1e35;--fab-gold:#c8a84b;--fab-gold-h:#b8952e;
+  --fab-gold-bg:#251e0a;--fab-green:#4caf50;
+  --fab-red:#e53935;--fab-red-h:#c62828;--fab-red-bg:#1a0a0a;
+  --fab-r-sm:.25rem;--fab-r-md:.5rem;--fab-r-lg:.75rem;
+  --fab-r-xl:1rem;--fab-r-full:9999px;
+  --fab-shadow:0 4px 20px rgba(0,0,0,.5);
+  --fab-tr:180ms cubic-bezier(.16,1,.3,1);
+  --fd:'Barlow Condensed','Arial Narrow',sans-serif;
+  --fb:'Barlow','Helvetica Neue',sans-serif;
+  font-family:var(--fb);
+  font-size:clamp(1rem,.95rem + .25vw,1.125rem);
+  color:var(--fab-text);background:var(--fab-bg);
+  border-radius:var(--fab-r-xl);overflow:hidden;line-height:1.65;
+}
+.mab-acervo .hero{position:relative;overflow:hidden;background:var(--fab-surface);border-bottom:1px solid var(--fab-divider)}
+.mab-acervo .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(to right,var(--fab-divider) 1px,transparent 1px),linear-gradient(to bottom,var(--fab-divider) 1px,transparent 1px);background-size:48px 48px;opacity:.18;pointer-events:none;z-index:0}
+.mab-acervo .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,var(--fab-bg));pointer-events:none;z-index:1}
+.mab-acervo .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:2.5rem;align-items:center;padding:3rem 2rem 2rem;max-width:1100px;margin:0 auto}
+@media(max-width:860px){.mab-acervo .hero-grid{grid-template-columns:1fr;padding:2rem 1rem 1.5rem}}
+.mab-acervo .bc{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--fab-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem}
+.mab-acervo .bc a{color:var(--fab-muted);text-decoration:none;transition:color var(--fab-tr)}
+.mab-acervo .bc a:hover{color:var(--fab-gold)}
+.mab-acervo .bc-sep{color:var(--fab-faint)}
+.mab-acervo .badge-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.mab-acervo .badge{font-family:var(--fd);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .7rem;border-radius:var(--fab-r-sm);border:1px solid}
+.mab-acervo .badge-era{color:var(--fab-gold);border-color:var(--fab-gold);background:var(--fab-gold-bg)}
+.mab-acervo .badge-cat{color:var(--fab-blue);border-color:var(--fab-blue);background:var(--fab-blue-bg)}
+.mab-acervo .badge-ok{color:var(--fab-green);border-color:#2e7d32;background:rgba(46,125,50,.12)}
+.mab-acervo .badge-red{color:var(--fab-red);border-color:var(--fab-red);background:var(--fab-red-bg)}
+.mab-acervo .piece-title{font-family:var(--fd);font-weight:800;font-size:clamp(2.2rem,5vw,4.5rem);line-height:1.05;letter-spacing:.01em;color:var(--fab-text);margin-bottom:.75rem}
+.mab-acervo .piece-sub{font-size:clamp(.95rem,1vw,1.05rem);color:var(--fab-muted);margin-bottom:1.5rem;line-height:1.6;max-width:54ch}
+.mab-acervo .meta-chips{display:flex;flex-wrap:wrap;gap:.75rem}
+.mab-acervo .mc{display:flex;align-items:center;gap:.5rem;background:var(--fab-offset);border:1px solid var(--fab-border);border-radius:var(--fab-r-lg);padding:.4rem .75rem}
+.mab-acervo .mc svg{color:var(--fab-gold);width:15px;height:15px;flex-shrink:0}
+.mab-acervo .mc-l{font-size:.65rem;color:var(--fab-muted);text-transform:uppercase;letter-spacing:.07em;display:block}
+.mab-acervo .mc-v{font-family:var(--fd);font-weight:700;font-size:.95rem;color:var(--fab-text)}
+.mab-acervo .mc-v small{font-family:var(--fb);font-weight:400;font-size:.8rem;color:var(--fab-muted)}
+
+.mab-acervo .model-wrap{
+  position:relative;border-radius:var(--fab-r-xl);overflow:hidden;
+  aspect-ratio:4/3;background:radial-gradient(ellipse at center,#1c2440 0%,#080c14 100%);
+  border:1px solid var(--fab-border);box-shadow:var(--fab-shadow),0 0 60px rgba(26,115,197,.15);display:block;
+}
+.mab-acervo model-viewer{
+  width:100%;height:100%;min-height:320px;border-radius:var(--fab-r-xl);
+  background:radial-gradient(ellipse at center,#1c2440,#080c14);--poster-color:transparent;
+}
+.mab-acervo .model-badge{
+  position:absolute;top:.75rem;right:.75rem;display:flex;align-items:center;gap:.35rem;
+  font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(11,14,20,.8);border:1px solid var(--fab-gold);border-radius:var(--fab-r-full);
+  padding:.2rem .75rem;color:var(--fab-gold);z-index:10;pointer-events:none
+}
+.mab-acervo .mdot{width:6px;height:6px;border-radius:50%;background:var(--fab-gold);animation:mab-pulse 2s ease-in-out infinite}
+@keyframes mab-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+.mab-acervo .body-grid{display:grid;grid-template-columns:1fr 300px;gap:2.5rem;align-items:start;max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+@media(max-width:860px){.mab-acervo .body-grid{grid-template-columns:1fr;padding:1.5rem 1rem}}
+.mab-acervo .sec{margin-bottom:2.5rem}
+.mab-acervo .sec-label{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.mab-acervo .sec-label-line{flex:1;height:1px;background:var(--fab-divider)}
+.mab-acervo .sec-label-txt{font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--fab-gold)}
+.mab-acervo .sec h2{font-family:var(--fd);font-weight:700;font-size:clamp(1.4rem,2vw,2rem);color:var(--fab-text);margin-bottom:1rem;padding-left:1rem;border-left:3px solid var(--fab-gold)}
+.mab-acervo .sec p{font-size:clamp(.95rem,.9rem + .2vw,1.05rem);color:var(--fab-muted);margin-bottom:1rem;line-height:1.75}
+.mab-acervo .sec p strong{color:var(--fab-text);font-weight:600}
+
+.mab-acervo .tl{position:relative;padding-left:2rem}
+.mab-acervo .tl::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--fab-gold),var(--fab-blue),transparent)}
+.mab-acervo .tl-item{position:relative;margin-bottom:1.5rem}
+.mab-acervo .tl-item::before{content:'';position:absolute;left:-1.7rem;top:5px;width:12px;height:12px;border-radius:50%;background:var(--fab-gold);border:2px solid var(--fab-bg);box-shadow:0 0 8px var(--fab-gold)}
+.mab-acervo .tl-year{font-family:var(--fd);font-weight:700;font-size:.85rem;color:var(--fab-gold);letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .tl-desc{font-size:.9rem;color:var(--fab-muted);line-height:1.6}
+
+.mab-acervo .specs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--fab-divider);border:1px solid var(--fab-divider);border-radius:var(--fab-r-lg);overflow:hidden}
+@media(max-width:500px){.mab-acervo .specs{grid-template-columns:1fr}}
+.mab-acervo .spec{background:var(--fab-surface);padding:.9rem 1.2rem}
+.mab-acervo .spec-l{font-size:.65rem;color:var(--fab-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem}
+.mab-acervo .spec-v{font-family:var(--fd);font-size:1.2rem;font-weight:700;color:var(--fab-text)}
+.mab-acervo .spec-v small{font-family:var(--fb);font-size:.8rem;color:var(--fab-muted);font-weight:400}
+
+.mab-acervo .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+@media(max-width:600px){.mab-acervo .gallery{grid-template-columns:1fr 1fr}}
+.mab-acervo .gal-item{aspect-ratio:4/3;border-radius:var(--fab-r-md);overflow:hidden;background:var(--fab-offset);border:1px solid var(--fab-border);position:relative;cursor:pointer}
+.mab-acervo .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.mab-acervo .gal-item:hover img{transform:scale(1.06)}
+.mab-acervo .gal-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);padding:.6rem .6rem .4rem;font-size:.7rem;color:#d8deef}
+
+.mab-acervo .lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(5,8,14,.88);backdrop-filter:blur(4px)}
+.mab-acervo .lightbox.is-open{display:flex}
+.mab-acervo .lightbox-media{position:relative;max-width:min(95vw,1100px);max-height:88vh}
+.mab-acervo .lightbox-img{display:block;max-width:100%;max-height:88vh;width:auto;height:auto;border-radius:var(--fab-r-md);border:1px solid var(--fab-border);box-shadow:var(--fab-shadow)}
+.mab-acervo .lightbox-close{position:absolute;top:.5rem;right:.5rem;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--fab-r-full);border:1px solid var(--fab-border);background:rgba(11,14,20,.75);color:var(--fab-text);cursor:pointer}
+
+.mab-acervo .sidebar{min-width:0}
+.mab-acervo .scard{background:var(--fab-surface);border:1px solid var(--fab-border);border-radius:var(--fab-r-lg);padding:1rem;margin-bottom:1rem;box-shadow:var(--fab-shadow)}
+.mab-acervo .scard h3{font-family:var(--fd);font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--fab-gold);margin-bottom:.8rem}
+.mab-acervo .facts{display:grid;gap:.75rem}
+.mab-acervo .fact{padding-bottom:.75rem;border-bottom:1px solid var(--fab-divider)}
+.mab-acervo .fact:last-child{padding-bottom:0;border-bottom:0}
+.mab-acervo .fact span{display:block;font-size:.65rem;color:var(--fab-faint);text-transform:uppercase;letter-spacing:.08em}
+.mab-acervo .fact strong{display:block;font-size:.95rem;color:var(--fab-text);font-weight:600}
+
+.mab-acervo .action-list{display:grid;gap:.75rem}
+.mab-acervo .action-btn{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;
+  text-decoration:none;padding:.8rem 1rem;border-radius:var(--fab-r-md);font-weight:600;
+  transition:transform var(--fab-tr),background var(--fab-tr),border-color var(--fab-tr),color var(--fab-tr);
+  border:1px solid var(--fab-border)
+}
+.mab-acervo .action-btn:hover{transform:translateY(-1px)}
+.mab-acervo .action-primary{background:var(--fab-blue);color:#fff;border-color:var(--fab-blue)}
+.mab-acervo .action-secondary{background:var(--fab-offset);color:var(--fab-text)}
+.mab-acervo .action-gold{background:var(--fab-gold-bg);color:var(--fab-gold);border-color:var(--fab-gold)}
+
+.mab-acervo .mab-fu{opacity:0;transform:translateY(14px);animation:mab-fadeUp .7s ease forwards}
+@keyframes mab-fadeUp{to{opacity:1;transform:none}}
+</style>
+
+<section class="mab-acervo" aria-label="Acervo digital do MAB - SunBA">
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy mab-fu" style="animation-delay:.05s">
+        <div class="bc">
+          <a href="#">MAB</a>
+          <span class="bc-sep">/</span>
+          <a href="#">Acervo Digital</a>
+          <span class="bc-sep">/</span>
+          <span>Pesquisa</span>
+        </div>
+
+        <div class="badge-row">
+          <span class="badge badge-era">Pesquisa e Desenvolvimento</span>
+          <span class="badge badge-cat">Categoria Pesquisa</span>
+          <span class="badge badge-ok">Acervo Digital</span>
+        </div>
+
+        <h1 class="piece-title">SunBA</h1>
+        <p class="piece-sub">
+          Artefato preservado no acervo digital do MAB como representação de iniciativas vinculadas à
+          pesquisa, ao desenvolvimento e à experimentação tecnológica no contexto aeroespacial brasileiro.
+          A peça integra a memória institucional de soluções concebidas para estudo, validação e apoio a atividades técnicas.
+        </p>
+
+        <div class="meta-chips">
+          <div class="mc">
+            <i data-lucide="flask-conical"></i>
+            <div><span class="mc-l">Categoria</span><span class="mc-v">Pesquisa</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="boxes"></i>
+            <div><span class="mc-l">Identificador</span><span class="mc-v">MAB_P_001_SunBA</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="map-pinned"></i>
+            <div><span class="mc-l">Localização</span><span class="mc-v">MAB / DCTA</span></div>
+          </div>
+          <div class="mc">
+            <i data-lucide="calendar-range"></i>
+            <div><span class="mc-l">Incorporação</span><span class="mc-v">2026 <small>catálogo digital</small></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-wrap mab-fu" style="animation-delay:.18s">
+        <div class="model-badge"><span class="mdot"></span> Visualização 3D</div>
+        <model-viewer
+          src="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/01.Acervo/MAB_P_001_SunBA@ACERVO.glb"
+          alt="Modelo tridimensional do SunBA"
+          camera-controls
+          auto-rotate
+          shadow-intensity="1"
+          exposure="1"
+          interaction-prompt="auto"
+          ar
+          ar-modes="webxr scene-viewer quick-look">
+        </model-viewer>
+      </div>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <main>
+      <section class="sec mab-fu" style="animation-delay:.24s">
+        <div class="sec-label">
+          <span class="sec-label-txt">Contexto</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Contexto histórico e técnico</h2>
+        <p>
+          O SunBA é apresentado no acervo digital como um exemplar associado ao ambiente de <strong>pesquisa tecnológica</strong>,
+          preservando a memória de iniciativas de estudo, ensaio, desenvolvimento e validação conduzidas no ecossistema aeroespacial nacional.
+        </p>
+        <p>
+          No contexto museológico do MAB, peças dessa natureza possuem especial relevância por evidenciarem não apenas resultados finais,
+          mas também os processos de concepção, experimentação e amadurecimento técnico que sustentam a evolução científica e industrial.
+        </p>
+        <p>
+          Seu registro contribui para ampliar a compreensão do visitante sobre a cadeia de inovação, destacando o papel das atividades de pesquisa
+          na formação de competências estratégicas e no avanço de capacidades institucionais.
+        </p>
+      </section>
+
+      <section class="sec mab-fu" style="animation-delay:.3s">
+        <div class="sec-label">
+          <span class="sec-label-txt">Linha do tempo</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Marcos de referência</h2>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="tl-year">Concepção</div>
+            <div class="tl-desc">Desenvolvimento associado a atividades de estudo e experimentação em ambiente técnico-científico.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">Ensaios</div>
+            <div class="tl-desc">Aplicação em contexto de avaliação, validação ou demonstração de conceito, conforme a finalidade do projeto.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">Emprego técnico</div>
+            <div class="tl-desc">Utilização como elemento de apoio ao amadurecimento tecnológico e à consolidação de conhecimentos especializados.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-year">Preservação</div>
+            <div class="tl-desc">Incorporação ao acervo digital do MAB para fins de documentação histórica, educacional e institucional.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec mab-fu" style="animation-delay:.36s">
+        <div class="sec-label">
+          <span class="sec-label-txt">Ficha técnica</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Identificação de acervo</h2>
+        <div class="specs">
+          <div class="spec">
+            <div class="spec-l">ID do acervo</div>
+            <div class="spec-v">MAB_P_001_SunBA</div>
+          </div>
+          <div class="spec">
+            <div class="spec-l">Categoria</div>
+            <div class="spec-v">Pesquisa</div>
+          </div>
+          <div class="spec">
+            <div class="spec-l">Tipo</div>
+            <div class="spec-v">Artefato técnico-experimental</div>
+          </div>
+          <div class="spec">
+            <div class="spec-l">Vinculação</div>
+            <div class="spec-v">Pesquisa e desenvolvimento</div>
+          </div>
+          <div class="spec">
+            <div class="spec-l">Situação</div>
+            <div class="spec-v">Preservado em catálogo digital</div>
+          </div>
+          <div class="spec">
+            <div class="spec-l">Instituição</div>
+            <div class="spec-v">MAB / DCTA</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec mab-fu" style="animation-delay:.42s">
+        <div class="sec-label">
+          <span class="sec-label-txt">Galeria</span>
+          <span class="sec-label-line"></span>
+        </div>
+        <h2>Imagens do acervo</h2>
+        <div class="gallery">
+          <button class="gal-item" type="button" data-img="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/02.Imagens/MAB_P_001_SunBA@ACERVO-11.jpg" data-alt="Vista geral do SunBA">
+            <img src="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/02.Imagens/MAB_P_001_SunBA@ACERVO-11.jpg" alt="Vista geral do SunBA" loading="lazy">
+            <span class="gal-cap">Vista geral</span>
+          </button>
+          <button class="gal-item" type="button" data-img="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/02.Imagens/MAB_P_001_SunBA@ACERVO-12.jpg" data-alt="Detalhe estrutural do SunBA">
+            <img src="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/02.Imagens/MAB_P_001_SunBA@ACERVO-12.jpg" alt="Detalhe estrutural do SunBA" loading="lazy">
+            <span class="gal-cap">Detalhe estrutural</span>
+          </button>
+          <button class="gal-item" type="button" data-img="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/02.Imagens/MAB_P_001_SunBA@ACERVO-13.jpg" data-alt="Registro lateral do SunBA">
+            <img src="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/02.Imagens/MAB_P_001_SunBA@ACERVO-13.jpg" alt="Registro lateral do SunBA" loading="lazy">
+            <span class="gal-cap">Registro lateral</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="sidebar mab-fu" style="animation-delay:.18s">
+      <div class="scard">
+        <h3>Registro do acervo</h3>
+        <div class="facts">
+          <div class="fact"><span>Título</span><strong>SunBA</strong></div>
+          <div class="fact"><span>ID</span><strong>MAB_P_001_SunBA</strong></div>
+          <div class="fact"><span>Categoria</span><strong>Pesquisa</strong></div>
+          <div class="fact"><span>Subcategoria</span><strong>Pesquisa aplicada</strong></div>
+          <div class="fact"><span>Localização</span><strong>MAB / DCTA</strong></div>
+          <div class="fact"><span>Conservação</span><strong>Bom estado</strong></div>
+          <div class="fact"><span>Incorporação</span><strong>2026</strong></div>
+        </div>
+      </div>
+
+      <div class="scard">
+        <h3>Ações</h3>
+        <div class="action-list">
+          <a class="action-btn action-primary" href="https://raw.githubusercontent.com/heglas/DCTA/main/01.MAB/01.Acervo/MAB_P_001_SunBA@ACERVO.glb" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="box"></i> Abrir modelo 3D
+          </a>
+          <a class="action-btn action-secondary" href="#" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="file-text"></i> Ficha técnica (PDF)
+          </a>
+          <a class="action-btn action-gold" href="#" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="qr-code"></i> Visualizar em AR
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="lightbox" id="mab-lightbox" aria-hidden="true">
+    <div class="lightbox-media">
+      <button class="lightbox-close" type="button" aria-label="Fechar imagem ampliada">
+        <i data-lucide="x"></i>
+      </button>
+      <img class="lightbox-img" src="" alt="">
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  if(window.lucide){ lucide.createIcons(); }
+
+  var lb=document.getElementById('mab-lightbox');
+  var lbImg=lb?lb.querySelector('.lightbox-img'):null;
+  var btnClose=lb?lb.querySelector('.lightbox-close'):null;
+
+  document.querySelectorAll('.mab-acervo .gal-item').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(!lb || !lbImg) return;
+      lbImg.src=btn.getAttribute('data-img');
+      lbImg.alt=btn.getAttribute('data-alt') || '';
+      lb.classList.add('is-open');
+      lb.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    });
+  });
+
+  function closeLb(){
+    if(!lb) return;
+    lb.classList.remove('is-open');
+    lb.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    if(lbImg){ lbImg.src=''; lbImg.alt=''; }
+  }
+
+  if(btnClose){ btnClose.addEventListener('click',closeLb); }
+  if(lb){
+    lb.addEventListener('click',function(e){ if(e.target===lb) closeLb(); });
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && lb && lb.classList.contains('is-open')) closeLb();
+  });
+
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.style.animationPlayState='running';
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:.1});
+    document.querySelectorAll('.mab-acervo .mab-fu').forEach(function(el){
+      el.style.animationPlayState='paused';
+      obs.observe(el);
+    });
+  }
+})();
+</script>
