@@ -1,4 +1,4 @@
-# 🎯 DCTA — Centro de Difusão de Tecnologia e Conhecimento
+# 🎯 DCTA — Departamento de Ciência e Tecnologia Aeroespacial
 
 > Repositório de projetos criados por **Heglas Oliveira** no DCTA, atuando como programador, designer e fotógrafo.
 
@@ -26,7 +26,7 @@
 
 ## 🎨 Sobre
 
-Este repositório reúne os projetos desenvolvidos no contexto do **DCTA (Centro de Difusão de Tecnologia e Conhecimento)**, abrangendo três principais áreas de atuação:
+Este repositório reúne os projetos desenvolvidos no contexto do **DCTA**, abrangendo três principais áreas de atuação:
 
 | Área | Descrição |
 |------|-----------|
